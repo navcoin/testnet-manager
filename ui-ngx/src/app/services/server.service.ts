@@ -12,7 +12,6 @@ export class ServerService {
 
   createServers(serverVO: ServerVO) {
 
-
     let namesArr: string[] = [];
     for (let i:number = 0; i < serverVO.servers; i++) {
 
@@ -68,7 +67,7 @@ export class ServerService {
 
     let startScript: string = `#!/bin/bash
 
-curl -X POST -H 'Content-Type: application/json' -d 'CALL START' https://webhook.site/eeb8307f-67ce-460b-9a87-24f9f7575d48
+curl -X POST -H 'Content-Type: application/json' -d 'CALL START' ${serverVO.callbackUrl}
 #--------------------------------------------------------------------------------
 # Add user and group first to make sure their IDs get assigned consistently,
 # regardless of whatever dependencies get added
