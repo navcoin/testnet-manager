@@ -1,1 +1,8 @@
-/* You can add global styles to this file, and also import other style files */
+@import "nav-theme";
+
+
+html, body {
+  background-color: whitesmoke;
+  margin: 0;
+  padding: 0;
+}

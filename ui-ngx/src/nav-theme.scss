@@ -1,0 +1,33 @@
+@import '../node_modules/@angular/material/theming';
+
+@include mat-core();
+
+// Define the default theme (same as the example above).
+$app-primary: mat-palette($mat-purple);
+$app-accent:  mat-palette($mat-light-blue);
+$app-theme:   mat-light-theme($app-primary, $app-accent);
+
+// Include the default theme styles.
+@include angular-material-theme($app-theme);
+
+//.mat-accent-default{
+//  color: map-get($app-accent, default);
+//}
+//
+//.mat-accent-lighter{
+//  color: map-get($app-accent, lighter);
+//}
+//
+//.mat-accent-darker{
+//  color: map-get($app-accent, darker);
+//}
+
+
+
+
+
+// Define an alternate dark theme.
+//$dark-primary: mat-palette($mat-blue-grey);
+//$dark-accent:  mat-palette($mat-amber, A200, A100, A400);
+//$dark-warn:    mat-palette($mat-deep-orange);
+//$dark-theme:   mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
