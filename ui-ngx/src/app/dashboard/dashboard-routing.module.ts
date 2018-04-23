@@ -1,7 +1,6 @@
 import {NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
 import {DashboardComponent} from './dashboard.component';
-import {AuthGuard} from "../../shared/services/guards/auth.guard";
 
 
 @NgModule({
@@ -14,7 +13,7 @@ import {AuthGuard} from "../../shared/services/guards/auth.guard";
         // resolve: {
         //   authResolve: AuthResolver
         // }
-        canActivate: [AuthGuard]
+        // canActivate: [AuthGuard]
       },
 
 

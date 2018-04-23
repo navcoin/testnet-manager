@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {TickerService} from '../../shared/services/ticker/ticker.service';
 
 // declare var TradingView;
 
@@ -11,7 +10,7 @@ import {TickerService} from '../../shared/services/ticker/ticker.service';
 export class DashboardComponent implements OnInit {
 
   constructor(
-    private _tickerService: TickerService
+
   ) { }
 
   ngOnInit() {
