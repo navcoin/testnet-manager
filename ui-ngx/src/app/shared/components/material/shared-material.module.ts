@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 
 import {
   MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule,
-  MatMenuModule, MatSnackBarModule, MatTableModule, MatToolbarModule, MatTooltipModule
+  MatMenuModule, MatSnackBarModule, MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule
 } from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -52,7 +52,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     MatTooltipModule,
     MatCardModule,
     MatDialogModule,
-    MatTableModule
+    MatTabsModule
 
   ]
 })
