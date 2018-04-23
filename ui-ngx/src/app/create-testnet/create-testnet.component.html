@@ -1,22 +1,39 @@
+<mat-horizontal-stepper [linear]="isLinear" #stepper="matHorizontalStepper">
 
-<div fxLayout="column"
-     fxLayoutAlign="space-around center" >
+  <mat-step [stepControl]="testnetGroupName">
+    <form [formGroup]="testnetGroupName">
+      <ng-template matStepLabel>Testnet name</ng-template>
 
-  <div style="width: 100%">
-
-    <h1>Testnet server groups</h1>
-    <mat-tab-group>
-      <mat-tab label="devnet">
-        <app-deploy></app-deploy>
-      </mat-tab>
-
-
-      <mat-tab label="Tab 2">Content 2</mat-tab>
-    </mat-tab-group>
-
-  </div>
+      <mat-form-field>
+        <input matInput placeholder="Group name" formControlName="testnetGroupName" required>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
 
 
-</div>
 
 
+  <mat-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel>Fill out your address</ng-template>
+      <mat-form-field>
+        <input matInput placeholder="Address" formControlName="secondCtrl" required>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Review</ng-template>
+    You are now done.
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>

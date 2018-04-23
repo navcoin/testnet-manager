@@ -8,6 +8,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {HttpClientModule} from '@angular/common/http';
 import {SharedMaterialModule} from "../shared/components/material/shared-material.module";
+import {MatHorizontalStepper} from "@angular/material";
+import {ReactiveFormsModule} from "@angular/forms";
 
 
 
@@ -16,6 +18,7 @@ import {SharedMaterialModule} from "../shared/components/material/shared-materia
     CommonModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
 
     SharedMaterialModule,
 
@@ -25,7 +28,7 @@ import {SharedMaterialModule} from "../shared/components/material/shared-materia
     CreateTestnetRoutingModule
   ],
   declarations: [
-    CreateTestnetComponent,
+    CreateTestnetComponent
   ],
   exports: [CreateTestnetComponent]
 })

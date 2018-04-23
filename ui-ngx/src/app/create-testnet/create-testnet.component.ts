@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 // declare var TradingView;
 
@@ -9,33 +10,22 @@ import {Component, OnInit} from '@angular/core';
 })
 export class CreateTestnetComponent implements OnInit {
 
-  constructor(
+  isLinear = false;
+  testnetGroupName: FormGroup;
+  secondFormGroup: FormGroup;
 
+  constructor(
+    private _formBuilder: FormBuilder
   ) { }
 
   ngOnInit() {
 
-    // new TradingView.MediumWidget({
-    //   "container_id": "tv-medium-widget-54b92",
-    //   "symbols": [
-    //     [
-    //       "USD",
-    //       "BITTREX:NAVUSD|1y"
-    //     ],
-    //     [
-    //       "Bitcoin",
-    //       "BITTREX:NAVBTC|1y"
-    //     ]
-    //   ],
-    //   "greyText": "Quotes by",
-    //   "gridLineColor": "#e9e9ea",
-    //   "fontColor": "#83888D",
-    //   "underLineColor": "rgba(152, 0, 255, 0.29)",
-    //   "trendLineColor": "rgba(152, 0, 255, 1)",
-    //   "width": "100%",
-    //   "height": "400px",
-    //   "locale": "en"
-    // });
+    this.testnetGroupName = this._formBuilder.group({
+      firstCtrl: ['', Validators.required]
+    });
+    this.secondFormGroup = this._formBuilder.group({
+      secondCtrl: ['', Validators.required]
+    });
 
   }
 

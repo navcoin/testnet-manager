@@ -2,8 +2,20 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 
 import {
-  MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule,
-  MatMenuModule, MatSnackBarModule, MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule
+  MatButtonModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatDialogModule,
+  MatFormFieldModule,
+  MatHorizontalStepper,
+  MatIconModule,
+  MatInputModule,
+  MatMenuModule,
+  MatSnackBarModule, MatStepperModule,
+  MatTableModule,
+  MatTabsModule,
+  MatToolbarModule,
+  MatTooltipModule
 } from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -27,7 +39,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     MatCardModule,
     MatDialogModule,
     MatSnackBarModule,
-    MatTableModule,
+    MatTabsModule,
+    MatStepperModule
 
   ],
   declarations: [
@@ -52,7 +65,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     MatTooltipModule,
     MatCardModule,
     MatDialogModule,
-    MatTabsModule
+    MatTabsModule,
+    MatStepperModule
 
   ]
 })
