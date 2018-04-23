@@ -8,6 +8,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {HttpClientModule} from '@angular/common/http';
 import {SharedMaterialModule} from "../shared/components/material/shared-material.module";
+import { DeployComponent } from './components/deploy/deploy.component';
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import {SharedMaterialModule} from "../shared/components/material/shared-materia
   ],
   declarations: [
     DashboardComponent,
+    DeployComponent,
   ],
   exports: [DashboardComponent]
 })
