@@ -7,8 +7,7 @@ import (
 	"os"
 	"github.com/gorilla/mux"
 	"net/http"
-	"github.com/patrickmn/go-cache"
-	"time"
+	"github.com/NAVCoin/testnet-manager-api/nodes"
 )
 
 func main() {
@@ -20,10 +19,11 @@ func main() {
 	router := mux.NewRouter()
 
 	// load up the cache system
-	c := cache.New(cache.NoExpiration, 10*time.Minute)
+	//c := cache.New(cache.NoExpiration, 10*time.Minute)
 
+	nodes.InitSetupHandlers(router, "api")
 
 	// Start http server
-	port := fmt.Sprintf(":%d", 9000)
-	http.ListenAndServe(port, router)
+	port := fmt.Sprintf(":%d", 5000)
+	log.Fatal(http.ListenAndServe(port, router))
 }
