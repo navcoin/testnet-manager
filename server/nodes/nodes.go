@@ -7,23 +7,8 @@ import (
 	"encoding/json"
 	"github.com/NAVCoin/testnet-manager-api/server/digitalocean"
 	"github.com/digitalocean/godo"
+	"io/ioutil"
 )
-
-
-// InitSetupHandlers sets the api
-func InitSetupHandlers(r *mux.Router, prefix string) {
-
-	// setup namespace
-	namespace := "node"
-
-	// login route - takes the username, password and retruns a jwt
-	callbackPath := RouteBuilder(prefix, namespace, "v1", "log")
-	OpenRouteHandler(callbackPath, r, nodeCallBackHandler())
-
-	createDroplet := RouteBuilder(prefix, namespace, "v1", "create")
-	OpenRouteHandler(createDroplet, r, createDroplets())
-
-}
 
 
 // DropletMultiCreateRequest is a request to create multiple Droplets.
@@ -40,6 +25,26 @@ type DropletMultiCreateRequest struct {
 	Tags              []string              `json:"tags"`
 }
 
+// InitSetupHandlers sets the api
+func InitSetupHandlers(r *mux.Router, prefix string) {
+
+	// setup namespace
+	namespace := "node"
+
+	// login route - takes the username, password and retruns a jwt
+	callbackPath := RouteBuilder(prefix, namespace, "v1", "log")
+	OpenRouteHandler(callbackPath, r, nodeCallBackHandler())
+
+	createDroplet := RouteBuilder(prefix, namespace, "v1", "create")
+	OpenRouteHandler(createDroplet, r, createDroplets())
+
+}
+
+func newServerSetHandler() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+	})
+}
 
 
 func createDroplets() http.Handler {
@@ -75,9 +80,6 @@ func createDroplets() http.Handler {
 		}
 
 
-
-
-
 		digitalocean.CreateDroplet(token, &dropReq)
 
 
@@ -90,7 +92,10 @@ func createDroplets() http.Handler {
 func nodeCallBackHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		log.Println("here")
+		bodyBytes, _ := ioutil.ReadAll(r.Body)
+		bodyString := string(bodyBytes)
+
+		log.Println(bodyString)
 
 	})
 }
