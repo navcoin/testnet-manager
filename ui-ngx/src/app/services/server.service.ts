@@ -156,9 +156,14 @@ CONFIGURE_FLAGS
 mkdir temp
 cd temp
 
+curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Downloading db-4.8.30.NC' ${serverVO.callbackUrl}/api/node/v1/log
+
 mkdir -p /usr/local/berkeley-db-4.8
 wget "http://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz" -q
-echo "12edc0df75bf9abd7f82f821795bcee50f42cb2e5f76a6a281b85732798364ef  db-4.8.30.NC.tar.gz}" | sha256sum -c
+
+curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Downloading db-4.8.30.NC' ${serverVO.callbackUrl}/api/node/v1/log
+
+echo "12edc0df75bf9abd7f82f821795bcee50f42cb2e5f76a6a281b85732798364ef db-4.8.30.NC.tar.gz" | sha256sum -c
 tar -xzf db-4.8.30.NC.tar.gz
 
 cd db-4.8.30.NC/build_unix/
@@ -167,7 +172,6 @@ cd db-4.8.30.NC/build_unix/
                       --with-pic \\
                       --prefix=/usr/local/berkeley-db-4.8
 make install
-
 curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Berkeley DB Install complete' ${serverVO.callbackUrl}/api/node/v1/log
 
 curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Server setup complete' ${serverVO.callbackUrl}/api/node/v1/log
