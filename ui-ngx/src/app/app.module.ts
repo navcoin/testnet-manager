@@ -7,6 +7,7 @@ import {SharedMaterialModule} from './shared/components/material/shared-material
 import {AppRoutingModule} from "./app-routing.module";
 import {DashboardModule} from "./dashboard/dashboard.module";
 import {CreateTestnetModule} from "./create-testnet/create-testnet.module";
+import {ServerService} from "./services/server.service";
 
 
 @NgModule({
@@ -22,7 +23,9 @@ import {CreateTestnetModule} from "./create-testnet/create-testnet.module";
     SharedMaterialModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [
+    ServerService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
