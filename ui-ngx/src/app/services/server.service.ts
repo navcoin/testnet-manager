@@ -15,16 +15,20 @@ export class ServerService {
     let namesArr: string[] = [];
     for (let i:number = 0; i < serverVO.servers; i++) {
 
-      if( namesArr.length == 9) {
-        this.sendRequest(namesArr.slice(), serverVO);
-        namesArr.length = 0;
-      }else {
-        namesArr.push(`${serverVO.name}-${i+1}`);
-      }
+      // if( namesArr.length == 9) {
+      //   this.sendRequest(namesArr.slice(), serverVO);
+      //   namesArr.length = 0;
+      // }else {
+      //   namesArr.push(`${serverVO.name}-${i+1}`);
+      // }
+
+      namesArr.push(`${serverVO.name}-${i+1}`);
+      this.sendRequest(namesArr.slice(), serverVO);
+      namesArr.length = 0;
 
     }
 
-    this.sendRequest(namesArr.slice(), serverVO);
+
 
   }
 
@@ -38,7 +42,7 @@ export class ServerService {
       "ssh_keys": null,
       "backups": false,
       "ipv6": true,
-      "user_data": this.getStartScript(serverVO),
+      "user_data": this.getStartScript(serverVO, names[0]),
       "private_networking": null,
       "volumes": null,
       "tags": [
@@ -62,12 +66,13 @@ export class ServerService {
 
 
 
-  getStartScript(serverVO:ServerVO): string {
+  getStartScript(serverVO:ServerVO, serverName: String): string {
 
 
     let startScript: string = `#!/bin/bash
 
-curl -X POST -H 'Content-Type: application/json' -d 'CALL START' ${serverVO.callbackUrl}
+curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Starting setup' ${serverVO.callbackUrl}/api/node/v1/log
+
 #--------------------------------------------------------------------------------
 # Add user and group first to make sure their IDs get assigned consistently,
 # regardless of whatever dependencies get added
@@ -79,6 +84,8 @@ useradd -u 1000 -g navcoin -s /bin/bash -m -d /navcoin navcoin
 #--------------------------------------------------------------------------------
 # Installing packages
 #--------------------------------------------------------------------------------
+curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Installing packages' ${serverVO.callbackUrl}/api/node/v1/log
+
 apt-get update
 apt-get install -yq --no-install-recommends build-essential
 apt-get install -yq --no-install-recommends libcurl3-dev
@@ -108,17 +115,21 @@ apt-get install -yq --no-install-recommends  dos2unix
 apt-get clean
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Package install complete' ${serverVO.callbackUrl}/api/node/v1/log
 
+curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Enabling ports' ${serverVO.callbackUrl}/api/node/v1/log
 ufw allow 22
 ufw allow 44444
 ufw allow 44445
 ufw allow 44446
+curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Ports enabled' ${serverVO.callbackUrl}/api/node/v1/log
 
-sleep 5
 
 #--------------------------------------------------------------------------------
 # Install gosu
 #--------------------------------------------------------------------------------
+curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Install gosu' ${serverVO.callbackUrl}/api/node/v1/log
+
 GOSU_URL= "https://github.com/tianon/gosu/releases/download/"
 GOSU_VER= "1.9"
 
@@ -132,14 +143,15 @@ chmod +x /usr/local/bin/gosu
 #--------------------------------------------------------------------------------
 # Build + install Berkeley DB
 #--------------------------------------------------------------------------------
+
+curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Build + install Berkeley DB' ${serverVO.callbackUrl}/api/node/v1/log
+
 BDB_URL="http://download.oracle.com/berkeley-db"
 BDB_VER="db-4.8.30.NC"
 BDB_PKG="db-4.8.30.NC.tar.gz"
 BDB_CHK="12edc0df75bf9abd7f82f821795bcee50f42cb2e5f76a6a281b85732798364ef"
 BDB_DIR="/usr/local/berkeley-db-4.8"
 CONFIGURE_FLAGS
-
-
 
 mkdir temp
 cd temp
@@ -156,31 +168,11 @@ cd db-4.8.30.NC/build_unix/
                       --prefix=/usr/local/berkeley-db-4.8
 make install
 
+curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Berkeley DB Install complete' ${serverVO.callbackUrl}/api/node/v1/log
 
-#--------------------------------------------------------------------------------
-# Copy files
-#--------------------------------------------------------------------------------
-#ADD ./conf/apache2.conf /etc/apache2/
-#ADD ./conf/navpi.conf /etc/apache2/sites-available/
-#ADD ./bin /usr/local/bin
-#ADD docker-entrypoint.sh /usr/local/bin/docker-entrypoint
+curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Server setup complete' ${serverVO.callbackUrl}/api/node/v1/log
 
-#--------------------------------------------------------------------------------
-## Create ssl certificate
-#--------------------------------------------------------------------------------
-#mkdir /etc/apache2/ssl && cd /etc/apache2/ssl
-#openssl genrsa -des3 -passout pass:x -out tmp-navpi-ssl.key 2048
-#openssl rsa -passin pass:x -in tmp-navpi-ssl.key -out navpi-ssl.key
-#openssl req -new -key navpi-ssl.key -out navpi-ssl.csr -subj "/C=NZ/ST=Auckland/L=Auckland/O=Nav Coin/OU=Nav Pi/CN=my.navpi.org"
-#openssl x509 -req -days 365 -in navpi-ssl.csr -signkey navpi-ssl.key -out navpi-ssl.crt
-#rm tmp-navpi-ssl.key navpi-ssl.csr
 
-#--------------------------------------------------------------------------------
-## Enable apache modules and site
-#--------------------------------------------------------------------------------
-#a2enmod rewrite && a2enmod php5 && a2enmod ssl
-#a2ensite navpi.conf && a2dissite 000-default.conf
-  
   `;
 
     return startScript;
