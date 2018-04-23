@@ -34,29 +34,19 @@ func getClient(token string) (*godo.Client) {
 
 
 
-func CreateDroplet (token string) (*godo.Droplet, error)  {
-	dropletName := "super-cool-droplet"
-
-	createRequest := &godo.DropletCreateRequest{
-		Name:   dropletName,
-		Region: "nyc3",
-		Size:   "s-1vcpu-1gb",
-		Image: godo.DropletCreateImage{
-			Slug: "ubuntu-14-04-x64",
-		},
-	}
+func CreateDroplet (token string, dropletReq *godo.DropletMultiCreateRequest) ([]godo.Droplet, error)  {
 
 	ctx := context.TODO()
 
 	// get the the godo client
 	client := getClient(token)
 
-	newDroplet, _, err := client.Droplets.Create(ctx, createRequest)
+	newDroplets, _, err := client.Droplets.CreateMultiple(ctx, dropletReq)
 
 	if err != nil {
 		fmt.Printf("Something bad happened: %s\n\n", err)
 		return nil, err
 	}
 
-	return newDroplet, nil
+	return newDroplets, nil
 }

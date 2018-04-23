@@ -9,21 +9,6 @@ import (
 	"github.com/digitalocean/godo"
 )
 
-type DropletCreateRequest struct {
-	Token			  string 				`json:"token"`
-	Name              string                `json:"name"`
-	Region            string                `json:"region"`
-	Size              string                `json:"size"`
-	Image             godo.DropletCreateImage    `json:"image"`
-	SSHKeys           []godo.DropletCreateSSHKey `json:"ssh_keys"`
-	Backups           bool                  `json:"backups"`
-	IPv6              bool                  `json:"ipv6"`
-	PrivateNetworking bool                  `json:"private_networking"`
-	Monitoring        bool                  `json:"monitoring"`
-	UserData          string                `json:"user_data,omitempty"`
-	Volumes           []godo.DropletCreateVolume `json:"volumes,omitempty"`
-	Tags              []string              `json:"tags"`
-}
 
 // InitSetupHandlers sets the api
 func InitSetupHandlers(r *mux.Router, prefix string) {
@@ -41,26 +26,59 @@ func InitSetupHandlers(r *mux.Router, prefix string) {
 }
 
 
+// DropletMultiCreateRequest is a request to create multiple Droplets.
+type DropletMultiCreateRequest struct {
+	Names             []string              `json:"names"`
+	Region            string                `json:"region"`
+	Size              string                `json:"size"`
+	Image             string    `json:"image"`
+	Backups           bool                  `json:"backups"`
+	IPv6              bool                  `json:"ipv6"`
+	PrivateNetworking bool                  `json:"private_networking"`
+	Monitoring        bool                  `json:"monitoring"`
+	UserData          string                `json:"user_data,omitempty"`
+	Tags              []string              `json:"tags"`
+}
+
 
 
 func createDroplets() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		var createDroplet DropletCreateRequest
+		token := r.Header.Get("token")
+
+		createDroplet := DropletMultiCreateRequest{}
 
 		// get the json from the post data
 		err := json.NewDecoder(r.Body).Decode(&createDroplet)
 
-		if err != nil {
 
+
+		dropReq := godo.DropletMultiCreateRequest{}
+
+		dropReq.Names = createDroplet.Names
+		dropReq.UserData = createDroplet.UserData
+		dropReq.Region = createDroplet.Region
+		dropReq.Size = createDroplet.Size
+		dropReq.Backups = createDroplet.Backups
+		dropReq.IPv6 = createDroplet.IPv6
+		dropReq.PrivateNetworking = createDroplet.PrivateNetworking
+		dropReq.Tags = createDroplet.Tags
+		dropReq.UserData = createDroplet.UserData
+
+		dropReq.Image = godo.DropletCreateImage{}
+		dropReq.Image.Slug = createDroplet.Image
+
+
+		if err != nil {
+			log.Println(err.Error())
 		}
 
-		createDroplet.UserData = "curl -X POST -H 'Content-Type: application/json' -d \"Run From Manager\" https://webhook.site/eeb8307f-67ce-460b-9a87-24f9f7575d48"
 
 
 
 
-		digitalocean.CreateDroplet(createDroplet.Token)
+		digitalocean.CreateDroplet(token, &dropReq)
 
 
 	})
