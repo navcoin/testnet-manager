@@ -161,25 +161,107 @@ curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Downloading 
 mkdir -p /usr/local/berkeley-db-4.8
 wget "http://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz" -q
 
-curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Downloading db-4.8.30.NC' ${serverVO.callbackUrl}/api/node/v1/log
+curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Downloaded db-4.8.30.NC' ${serverVO.callbackUrl}/api/node/v1/log
 
 echo "12edc0df75bf9abd7f82f821795bcee50f42cb2e5f76a6a281b85732798364ef db-4.8.30.NC.tar.gz" | sha256sum -c
 tar -xzf db-4.8.30.NC.tar.gz
+
+curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Configuring db-4.8.30.NC' ${serverVO.callbackUrl}/api/node/v1/log
 
 cd db-4.8.30.NC/build_unix/
 ../dist/configure --enable-cxx \\
                       --disable-shared \\
                       --with-pic \\
                       --prefix=/usr/local/berkeley-db-4.8
+                      
+curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Installing db-4.8.30.NC' ${serverVO.callbackUrl}/api/node/v1/log
 make install
 curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Berkeley DB Install complete' ${serverVO.callbackUrl}/api/node/v1/log
+
+
+
+# -----------------------------------------------
+# Build the run.sh file
+#------------------------------------------------
+curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Generating run.sh' ${serverVO.callbackUrl}/api/node/v1/log
+
+cd /
+cat <<EOT >> run.sh
+
+cd /
+
+sleep 120
+curl -X POST -H 'Content-Type: application/json' -d "${serverName}: About to clone" ${serverVO.callbackUrl}/api/node/v1/log
+
+git clone -b v4.1.2-devnet https://github.com/NAVCoin/navcoin-core.git
+
+curl -X POST -H 'Content-Type: application/json' -d "${serverName}: Clone complete" ${serverVO.callbackUrl}/api/node/v1/log
+
+cd /navcoin-core
+
+curl -X POST -H 'Content-Type: application/json' -d "${serverName}: cd to navcoin-core" ${serverVO.callbackUrl}/api/node/v1/log
+
+./autogen.sh
+curl -X POST -H 'Content-Type: application/json' -d "${serverName} Ran navcoin autogen" ${serverVO.callbackUrl}/api/node/v1/log
+
+./configure LDFLAGS="-L/usr/local/berkeley-db-4.8/lib/" \\
+                CPPFLAGS="-I /usr/local/berkeley-db-4.8/include/" \\
+                --enable-hardening \\
+                --without-gui \\
+                --enable-upnp-default
+
+sleep 120
+curl -X POST -H 'Content-Type: application/json' -d "${serverName}: About to Make" ${serverVO.callbackUrl}/api/node/v1/log
+
+ls
+make
+
+curl -X POST -H 'Content-Type: application/json' -d "${serverName}: Make Complete" ${serverVO.callbackUrl}/api/node/v1/log
+make install
+curl -X POST -H 'Content-Type: application/json' -d "${serverName}: Install Complete" ${serverVO.callbackUrl}/api/node/v1/log
+
+ls
+cd ..
+
+rm -fr /navcoin-core/*
+rm -r /navcoin-core/
+
+curl -X POST -H 'Content-Type: application/json' -d "${serverName}: rm navcoin-src Complete" ${serverVO.callbackUrl}/api/node/v1/log
+
+
+navcoind -devnet -rpcuser=hi -rpcpassword=pass &
+curl -X POST -H 'Content-Type: application/json' -d "${serverName}: Start navcoin core Complete" ${serverVO.callbackUrl}/api/node/v1/log
+
+
+#curl -X POST -H 'Content-Type: application/json' -d "${serverName}: Sleeping" ${serverVO.callbackUrl}/api/node/v1/log
+#sleep 5
+#curl -X POST -H 'Content-Type: application/json' -d "${serverName}: awake" ${serverVO.callbackUrl}/api/node/v1/log
+
+#navcoin-cli -testnet -rpcuser=hi -rpcpassword=pass addnode "176.9.19.245" "add"
+#navcoin-cli -testnet -rpcuser=hi -rpcpassword=pass addnode "46.4.24.136" "add"
+
+#curl -X POST -H 'Content-Type: application/json' -d "${serverName}: Add nodes complete" ${serverVO.callbackUrl}/api/node/v1/log
+
+
+OUTPUT="$(navcoin-cli -testnet -staking -rpcuser=hi -rpcpassword=pass listreceivedbyaddress 0 true)"
+echo "%OUTPUT%"
+
+sleep 120
+curl -X POST -H 'Content-Type: application/json' -d "${serverName}:%OUTPUT%" ${serverVO.callbackUrl}/api/node/v1/log
+
+sleep 9999999999
+EOT
+
+
+chmod +x run.sh
+./run.sh
 
 curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Server setup complete' ${serverVO.callbackUrl}/api/node/v1/log
 
 
   `;
 
-    return startScript;
+    return startScript.replace('%OUTPUT%', '${OUTPUT}');
   }
 
 

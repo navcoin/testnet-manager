@@ -50,3 +50,4 @@ func CreateDroplet (token string, dropletReq *godo.DropletMultiCreateRequest) ([
 
 	return newDroplets, nil
 }
+
