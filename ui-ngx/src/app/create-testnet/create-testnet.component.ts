@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {ServerService} from "../services/server.service";
+import {ServerVO} from "../services/server.vo";
 
 // declare var TradingView;
 
@@ -10,7 +12,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 })
 export class CreateTestnetComponent implements OnInit {
 
-  isLinear = false;
+  isLinear = true;
   testnetNameFormGroup: FormGroup;
   testnetNameCtrl: FormControl;
 
@@ -20,14 +22,25 @@ export class CreateTestnetComponent implements OnInit {
   gitBranchGroup: FormGroup;
   gitBranchCtrl: FormControl;
 
+  ngrokGroup: FormGroup;
+  ngrokCtrl: FormControl;
+
+  doTokenGroup: FormGroup;
+  doTokenCtrl: FormControl;
+
+  serverGroup: FormGroup;
+  doServerCtrl: FormControl;
+
+
 
   constructor(
-    private _formBuilder: FormBuilder
+    private _formBuilder: FormBuilder,
+    private _serverService: ServerService
   ) { }
 
   ngOnInit() {
     // build the name control
-    this.testnetNameCtrl = new FormControl('', Validators.required);
+    this.testnetNameCtrl = new FormControl(null, Validators.required);
     this.testnetNameFormGroup = this._formBuilder.group({});
     this.testnetNameFormGroup.addControl("testnetNameCtrl", this.testnetNameCtrl);
 
@@ -38,6 +51,33 @@ export class CreateTestnetComponent implements OnInit {
     this.gitBranchCtrl = new FormControl('v4.1.2-devnet', Validators.required);
     this.gitBranchGroup = this._formBuilder.group({});
     this.gitBranchGroup.addControl("gitBranchCtrl", this.gitBranchCtrl);
+
+    this.ngrokCtrl = new FormControl('', Validators.required);
+    this.ngrokGroup = this._formBuilder.group({});
+    this.ngrokGroup.addControl("ngrokCtrl", this.ngrokCtrl);
+
+    this.doTokenCtrl = new FormControl('', Validators.required);
+    this.doTokenGroup = this._formBuilder.group({});
+    this.doTokenGroup.addControl("doTokenCtrl", this.doTokenCtrl);
+
+    this.doServerCtrl = new FormControl('', Validators.required);
+    this.serverGroup = this._formBuilder.group({});
+    this.serverGroup.addControl("doServerCtrl", this.doServerCtrl);
+
+  }
+
+  onCreate($event: MouseEvent) {
+    $event.preventDefault();
+
+    let serverVO: ServerVO = {} as ServerVO;
+
+    serverVO.token = this.doTokenCtrl.value;
+    serverVO.name = this.testnetNameCtrl.value;
+    serverVO.servers = parseInt(this.doServerCtrl.value.toString());
+    serverVO.callbackUrl= this.ngrokCtrl.value;
+
+    this._serverService.createServers(serverVO);
+
 
   }
 

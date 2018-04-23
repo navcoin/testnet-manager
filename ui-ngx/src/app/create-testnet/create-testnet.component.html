@@ -1,58 +1,106 @@
-<mat-horizontal-stepper [linear]="isLinear" #stepper="matHorizontalStepper">
+<div style="padding: 30px;">
+  <mat-horizontal-stepper [linear]="isLinear" #stepper="matHorizontalStepper">
 
-  <mat-step [stepControl]="testnetNameFormGroup">
-    <form [formGroup]="testnetNameFormGroup">
-      <ng-template matStepLabel>Testnet name</ng-template>
+    <mat-step [stepControl]="testnetNameFormGroup">
+      <form [formGroup]="testnetNameFormGroup">
+        <ng-template matStepLabel>Testnet name</ng-template>
 
-      <mat-form-field>
-        <input matInput placeholder="Group name" formControlName="testnetNameCtrl">
-      </mat-form-field>
-      <div>
-        <p>Note all nodes will be called with the groupname prefix and a number, eg: </p>
-        <p><strong>{{testnetNameCtrl.value}}-1</strong></p>
-      </div>
-      <div>
-        <button mat-button matStepperNext>Next</button>
-      </div>
-    </form>
-  </mat-step>
+        <mat-form-field>
+          <input matInput placeholder="Group name" formControlName="testnetNameCtrl" required>
+        </mat-form-field>
+        <div>
+          <p>Note all nodes will be called with the groupname prefix and a number, eg: </p>
+          <p><strong>{{testnetNameCtrl.value}}-1</strong></p>
+        </div>
+        <div>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
 
 
-  <mat-step [stepControl]="gitFormGroup">
-    <form [formGroup]="gitFormGroup">
-      <ng-template matStepLabel>Git Repo</ng-template>
-      <mat-form-field>
-        <input matInput placeholder="Git repo" formControlName="gitUrlCtrl" required>
-      </mat-form-field>
+    <mat-step [stepControl]="gitFormGroup">
+      <form [formGroup]="gitFormGroup">
+        <ng-template matStepLabel>Git Repo</ng-template>
+        <mat-form-field>
+          <input matInput placeholder="Git repo" formControlName="gitUrlCtrl" required>
+        </mat-form-field>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+
+
+
+    <mat-step [stepControl]="gitBranchGroup">
+      <form [formGroup]="gitBranchGroup">
+        <ng-template matStepLabel>Select Branch</ng-template>
+        <mat-form-field>
+          <input matInput placeholder="Git repo" formControlName="gitBranchCtrl" required>
+        </mat-form-field>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+
+
+    <mat-step [stepControl]="ngrokGroup">
+      <form [formGroup]="ngrokGroup">
+        <ng-template matStepLabel>Ngrok callback url</ng-template>
+        <mat-form-field>
+          <input matInput placeholder="Ngrok URL" formControlName="ngrokCtrl" required>
+        </mat-form-field>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+
+
+    <mat-step [stepControl]="doTokenGroup">
+      <form [formGroup]="doTokenGroup">
+        <ng-template matStepLabel>Digital Ocean Token</ng-template>
+        <mat-form-field>
+          <input matInput placeholder="API Token" formControlName="doTokenCtrl" required>
+        </mat-form-field>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step [stepControl]="serverGroup">
+      <form [formGroup]="serverGroup">
+        <ng-template matStepLabel>Size</ng-template>
+        <mat-form-field>
+          <input matInput type="number" placeholder="How many servers" formControlName="doServerCtrl" required>
+        </mat-form-field>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+
+
+    <mat-step>
+      <ng-template matStepLabel>Review</ng-template>
+        <ol>
+          <li>You want to build <strong>{{doServerCtrl.value}}</strong> servers.</li>
+          <li>They will be called <strong>{{testnetNameCtrl.value}}-1</strong> to  <strong>{{testnetNameCtrl.value}}-{{doServerCtrl.value}}</strong>.</li>
+          <li>From the repo <strong>{{gitUrlCtrl.value}}</strong> the will clone and build the branch <strong>{{gitBranchCtrl.value}}</strong></li>
+          <li>They will all callback to the url <strong>{{ngrokCtrl.value}}</strong></li>
+        </ol>
       <div>
         <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
+        <button mat-button color="primary" (click)="onCreate($event)" >Build all ({{doServerCtrl.value}}) Severs</button>
       </div>
-    </form>
-  </mat-step>
-
-
-
-  <mat-step [stepControl]="gitBranchGroup">
-    <form [formGroup]="gitBranchGroup">
-      <ng-template matStepLabel>Select Branch</ng-template>
-      <mat-form-field>
-        <input matInput placeholder="Git repo" formControlName="gitBranchCtrl" required>
-      </mat-form-field>
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
-      </div>
-    </form>
-  </mat-step>
-
-
-  <mat-step>
-    <ng-template matStepLabel>Review</ng-template>
-    You are now done.
-    <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button (click)="stepper.reset()">Reset</button>
-    </div>
-  </mat-step>
-</mat-horizontal-stepper>
+    </mat-step>
+  </mat-horizontal-stepper>
+</div>
