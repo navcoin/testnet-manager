@@ -3,6 +3,9 @@ import { NgModule } from '@angular/core';
 
 
 import { AppComponent } from './app.component';
+import {SharedMaterialModule} from './shared/components/material/shared-material.module';
+import {AppRoutingModule} from "./app-routing.module";
+import {DashboardModule} from "./dashboard/dashboard.module";
 
 
 @NgModule({
@@ -11,7 +14,12 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    SharedMaterialModule
+
+    DashboardModule,
+
+    SharedMaterialModule,
+
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
