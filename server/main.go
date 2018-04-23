@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"log"
@@ -7,7 +7,7 @@ import (
 	"os"
 	"github.com/gorilla/mux"
 	"net/http"
-	"github.com/NAVCoin/testnet-manager-api/nodes"
+	"github.com/NAVCoin/testnet-manager-api/server/nodes"
 )
 
 func main() {

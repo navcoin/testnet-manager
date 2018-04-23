@@ -5,7 +5,7 @@ import (
 	"log"
 	"github.com/gorilla/mux"
 	"net/http"
-	"github.com/NAVCoin/testnet-manager-api/middleware"
+	"github.com/NAVCoin/testnet-manager-api/server/middleware"
 )
 
 func RouteBuilder(prefix string, namespace string, version string, method string) string {
