@@ -51,7 +51,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     MatInputModule,
     MatTooltipModule,
     MatCardModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTableModule
 
   ]
 })
