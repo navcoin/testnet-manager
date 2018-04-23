@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 
 // declare var TradingView;
 
@@ -11,21 +11,33 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 export class CreateTestnetComponent implements OnInit {
 
   isLinear = false;
-  testnetGroupName: FormGroup;
-  secondFormGroup: FormGroup;
+  testnetNameFormGroup: FormGroup;
+  testnetNameCtrl: FormControl;
+
+  gitFormGroup: FormGroup;
+  gitUrlCtrl: FormControl;
+
+  gitBranchGroup: FormGroup;
+  gitBranchCtrl: FormControl;
+
 
   constructor(
     private _formBuilder: FormBuilder
   ) { }
 
   ngOnInit() {
+    // build the name control
+    this.testnetNameCtrl = new FormControl('', Validators.required);
+    this.testnetNameFormGroup = this._formBuilder.group({});
+    this.testnetNameFormGroup.addControl("testnetNameCtrl", this.testnetNameCtrl);
 
-    this.testnetGroupName = this._formBuilder.group({
-      firstCtrl: ['', Validators.required]
-    });
-    this.secondFormGroup = this._formBuilder.group({
-      secondCtrl: ['', Validators.required]
-    });
+    this.gitUrlCtrl = new FormControl('https://github.com/NAVCoin/navcoin-core.git', Validators.required);
+    this.gitFormGroup = this._formBuilder.group({});
+    this.gitFormGroup.addControl("gitUrlCtrl", this.gitUrlCtrl);
+
+    this.gitBranchCtrl = new FormControl('v4.1.2-devnet', Validators.required);
+    this.gitBranchGroup = this._formBuilder.group({});
+    this.gitBranchGroup.addControl("gitBranchCtrl", this.gitBranchCtrl);
 
   }
 

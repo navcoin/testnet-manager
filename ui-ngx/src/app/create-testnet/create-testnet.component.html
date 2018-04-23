@@ -1,12 +1,16 @@
 <mat-horizontal-stepper [linear]="isLinear" #stepper="matHorizontalStepper">
 
-  <mat-step [stepControl]="testnetGroupName">
-    <form [formGroup]="testnetGroupName">
+  <mat-step [stepControl]="testnetNameFormGroup">
+    <form [formGroup]="testnetNameFormGroup">
       <ng-template matStepLabel>Testnet name</ng-template>
 
       <mat-form-field>
-        <input matInput placeholder="Group name" formControlName="testnetGroupName" required>
+        <input matInput placeholder="Group name" formControlName="testnetNameCtrl">
       </mat-form-field>
+      <div>
+        <p>Note all nodes will be called with the groupname prefix and a number, eg: </p>
+        <p><strong>{{testnetNameCtrl.value}}-1</strong></p>
+      </div>
       <div>
         <button mat-button matStepperNext>Next</button>
       </div>
@@ -14,13 +18,11 @@
   </mat-step>
 
 
-
-
-  <mat-step [stepControl]="secondFormGroup">
-    <form [formGroup]="secondFormGroup">
-      <ng-template matStepLabel>Fill out your address</ng-template>
+  <mat-step [stepControl]="gitFormGroup">
+    <form [formGroup]="gitFormGroup">
+      <ng-template matStepLabel>Git Repo</ng-template>
       <mat-form-field>
-        <input matInput placeholder="Address" formControlName="secondCtrl" required>
+        <input matInput placeholder="Git repo" formControlName="gitUrlCtrl" required>
       </mat-form-field>
       <div>
         <button mat-button matStepperPrevious>Back</button>
@@ -28,6 +30,23 @@
       </div>
     </form>
   </mat-step>
+
+
+
+  <mat-step [stepControl]="gitBranchGroup">
+    <form [formGroup]="gitBranchGroup">
+      <ng-template matStepLabel>Select Branch</ng-template>
+      <mat-form-field>
+        <input matInput placeholder="Git repo" formControlName="gitBranchCtrl" required>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+
   <mat-step>
     <ng-template matStepLabel>Review</ng-template>
     You are now done.
