@@ -6,10 +6,7 @@ import (
 	"log"
 )
 
-type ActiveDroplets struct {
-
-	droplets []DropletData `json:"ActiveDroplets"`
-}
+var ActiveDropletsData = []DropletData{}
 
 type DropletData struct {
 	Name string `json:"name"`
@@ -19,8 +16,6 @@ type DropletData struct {
 	CallBackURL string `json:"callBackURL"`
 }
 
-
-var ActiveDropletsData ActiveDroplets
 
 
 func writeDropletData () {

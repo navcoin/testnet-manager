@@ -102,7 +102,13 @@ func createDroplets() http.Handler {
 		newDropletData.Name = createDroplet.Names[0]
 		newDropletData.InitialData = newDroplets[0]
 
-		ActiveDropletsData.droplets = append(ActiveDropletsData.droplets, newDropletData)
+		log.Println(newDropletData.Name)
+
+		ActiveDropletsData = append(ActiveDropletsData, newDropletData)
+
+		rankingsJson, _ := json.Marshal(newDropletData)
+
+		log.Println(rankingsJson)
 
 		writeDropletData()
 
