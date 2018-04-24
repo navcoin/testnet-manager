@@ -15,6 +15,10 @@ func main() {
 	log.Println(fmt.Sprintf("Server running in %s:%s", runtime.GOOS, runtime.GOARCH))
 	log.Println(fmt.Sprintf("App pid : %d.", os.Getpid()))
 
+	nodes.InitData()
+
+
+
 	// setup the router and the api
 	router := mux.NewRouter()
 

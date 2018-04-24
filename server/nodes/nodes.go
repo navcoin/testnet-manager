@@ -11,8 +11,28 @@ import (
 	"bytes"
 
 	"io/ioutil"
+	"strings"
 )
 
+
+
+// Response is the generic resp that will be used for the api
+type Response struct {
+	Data   interface{} `json:"data,omitempty"`
+	Meta   interface{} `json:"meta,omitempty"`
+	Errors []errorCode `json:"errors,omitempty"`
+}
+
+// Send marshal the response and write value
+func (i *Response) Send(w http.ResponseWriter) {
+	jsonValue, _ := json.Marshal(i)
+	w.Write(jsonValue)
+}
+
+type errorCode struct {
+	Code         string `json:"code,omitempty"`
+	ErrorMessage string `json:"errorMessage,omitempty"`
+}
 
 
 
@@ -39,14 +59,40 @@ func InitSetupHandlers(r *mux.Router, prefix string) {
 	createDroplet := RouteBuilder(prefix, namespace, "v1", "create")
 	OpenRouteHandler(createDroplet, r, createDroplets())
 
-
-	getRunSh := RouteBuilder(prefix, namespace, "v1", "runfile")
+	getRunSh := RouteBuilder(prefix, namespace, "v1", "{dropletname}/runfile")
 	OpenRouteHandler(getRunSh, r, getRunFileHandler())
 
+	getActiveNodesPath := RouteBuilder(prefix, namespace, "v1", "all/data")
+	OpenRouteHandler(getActiveNodesPath, r, getActiveNodesHandler())
+
+}
+
+func getActiveNodesHandler() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		appResp := Response{}
+		appResp.Data = ActiveDropletsData
+		appResp.Send(w)
+	})
 }
 
 func getRunFileHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		vars := mux.Vars(r)
+
+		dropletName := vars["dropletname"]
+
+		dropletData := getDataByDropletName(dropletName)
+
+		// build the runfile for the box
+		runsh := runFile
+		runsh = strings.Replace(runsh, "%dropletname%", dropletName, -1)
+		runsh = strings.Replace(runsh, "%callback%", dropletName, -1)
+		runsh = strings.Replace(runsh, "%repoURL%", dropletData.RepoURL, -1)
+		runsh = strings.Replace(runsh, "%repoBranch%", dropletData.ReporBranch, -1)
+
+		log.Print(runsh)
+
 
 		// ServeContent uses the name for mime detection
 		const name = "run"
@@ -54,7 +100,7 @@ func getRunFileHandler() http.Handler {
 
 		// tell the browser the returned content should be downloaded
 		w.Header().Set("Content-Disposition", "Attachment; filename=run.sh")
-		http.ServeContent(w, r, name, modtime, bytes.NewReader([]byte(runFile)))
+		http.ServeContent(w, r, name, modtime, bytes.NewReader([]byte(runsh)))
 
 
 	})
@@ -97,20 +143,18 @@ func createDroplets() http.Handler {
 		newDroplets, _ := digitalocean.CreateDroplet(token, &dropReq)
 
 
+		// Store all the current droplet info
 		newDropletData := DropletData{}
 		newDropletData.CallBackURL = createDroplet.CallBackURL
 		newDropletData.Name = createDroplet.Names[0]
 		newDropletData.InitialData = newDroplets[0]
+		newDropletData.RepoURL = createDroplet.RepoURL
+		newDropletData.ReporBranch = createDroplet.RepoBranch
 
-		log.Println(newDropletData.Name)
+		newDropletData.Logs = []string{}
 
-		ActiveDropletsData = append(ActiveDropletsData, newDropletData)
+		updateDropletData(newDropletData)
 
-		rankingsJson, _ := json.Marshal(newDropletData)
-
-		log.Println(rankingsJson)
-
-		writeDropletData()
 
 
 	})
@@ -124,6 +168,15 @@ func nodeCallBackHandler() http.Handler {
 
 		bodyBytes, _ := ioutil.ReadAll(r.Body)
 		bodyString := string(bodyBytes)
+
+		logData := strings.Split(bodyString, ":")
+
+		dropletData := getDataByDropletName(logData[0])
+
+		dropletData.Logs = append(dropletData.Logs, logData[1] )
+
+		updateDropletData(dropletData)
+
 
 		log.Println(bodyString)
 
