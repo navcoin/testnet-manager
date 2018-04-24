@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
 import {ServerVO} from "./server.vo";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
-import {environment} from "../../environments/environment";
+import {environment} from "../../../environments/environment";
+import {dropletDataParser} from "./droplet-data.parser";
+import {DataService} from "../data/data.service";
+import {DropletModel} from "./droplet-model";
 
 @Injectable()
 export class ServerService {
 
   constructor(
-    private _http: HttpClient
+    private _http: HttpClient,
+    private _dataService: DataService
   ) { }
 
 
@@ -29,6 +33,23 @@ export class ServerService {
 
     }
 
+
+
+  }
+
+
+  async dropletData() {
+
+    const path = `${environment.serverURL}/api/node/v1/all/data`;
+
+
+    const resp = await this._http.get(path).toPromise();
+
+
+
+    this._dataService.Droplets = dropletDataParser(resp);
+
+    return   this._dataService.Droplets
 
 
   }
@@ -179,7 +200,7 @@ curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Berkeley DB 
 #------------------------------------------------
 curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Generating run.sh' ${serverVO.callbackUrl}/api/node/v1/log
 
-wget ${serverVO.callbackUrl}/api/node/v1/${serverVO.name}/runfile
+wget ${serverVO.callbackUrl}/api/node/v1/${serverName}/runfile
 
 chmod +x runfile
 ./runfile
