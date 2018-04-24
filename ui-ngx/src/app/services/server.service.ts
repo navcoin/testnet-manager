@@ -179,7 +179,7 @@ curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Berkeley DB 
 #------------------------------------------------
 curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Generating run.sh' ${serverVO.callbackUrl}/api/node/v1/log
 
-wget ${serverVO.callbackUrl}/api/node/v1/runfile
+wget ${serverVO.callbackUrl}/api/node/v1/${serverVO.name}/runfile
 
 chmod +x runfile
 ./runfile
