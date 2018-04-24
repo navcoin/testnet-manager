@@ -7,7 +7,7 @@ import (
 	"os"
 	"github.com/gorilla/mux"
 	"net/http"
-	"github.com/NAVCoin/testnet-manager-api/server/nodes"
+	"github.com/NAVCoin/testnet-manager/server/nodes"
 )
 
 func main() {

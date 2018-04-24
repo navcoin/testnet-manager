@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"log"
 	"encoding/json"
-	"github.com/NAVCoin/testnet-manager-api/server/digitalocean"
+	"github.com/NAVCoin/testnet-manager/server/digitalocean"
 	"github.com/digitalocean/godo"
 	"io/ioutil"
 )
