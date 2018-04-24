@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {ServerService} from "../../services/server/server.service";
+import {DropletModel} from "../../services/server/droplet-model";
+import {DataService} from "../../services/data/data.service";
 
 @Component({
   selector: 'app-droplet-list',
@@ -7,9 +10,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DropletListComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private _serverService: ServerService,
+    private _dataService: DataService
+  ) { }
 
   ngOnInit() {
+    this._serverService.dropletData();
+  }
+
+
+  get dropletsData(): DropletModel[] {
+    return this._dataService.Droplets;
   }
 
 }

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {ServerService} from "../services/server.service";
-import {ServerVO} from "../services/server.vo";
+import {ServerService} from "../services/server/server.service";
+import {ServerVO} from "../services/server/server.vo";
 import {LocalStorageService} from "../services/local-storage/local-storage.service";
 
 // declare var TradingView;

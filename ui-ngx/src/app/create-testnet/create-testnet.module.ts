@@ -10,6 +10,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {SharedMaterialModule} from "../shared/components/material/shared-material.module";
 import {MatHorizontalStepper} from "@angular/material";
 import {ReactiveFormsModule} from "@angular/forms";
+import { DropletListComponent } from './droplet-list/droplet-list.component';
 
 
 
@@ -28,7 +29,8 @@ import {ReactiveFormsModule} from "@angular/forms";
     CreateTestnetRoutingModule
   ],
   declarations: [
-    CreateTestnetComponent
+    CreateTestnetComponent,
+    DropletListComponent
   ],
   exports: [CreateTestnetComponent]
 })

@@ -1,3 +1,23 @@
-<p>
-  droplet-list works!
-</p>
+<div class="list-wrapper">
+
+
+
+  <mat-accordion>
+    <mat-expansion-panel *ngFor="let model of dropletsData">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{model.name}}
+        </mat-panel-title>
+        <mat-panel-description>
+          Last log: {{model.logs[1]}}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <div *ngFor="let log of model.logs">
+        {{log}}
+      </div>
+
+    </mat-expansion-panel>
+  </mat-accordion>
+
+</div>
