@@ -16,8 +16,8 @@ type DropletData struct {
 	InitialData        interface{} `json:"initialData"`
 	CurrentDropletData interface{} `json:"currentDropletData"`
 	Logs               []string    `json:"logs"`
-	ReporBranch        string      `json:"currentBranch"`
-	RepoURL            string      `json:"gitURL"`
+	RepoBranch         string      `json:"repoBranch"`
+	RepoURL            string      `json:"repoURL"`
 	CallBackURL        string      `json:"callBackURL"`
 }
 

@@ -87,11 +87,9 @@ func getRunFileHandler() http.Handler {
 		// build the runfile for the box
 		runsh := runFile
 		runsh = strings.Replace(runsh, "%dropletname%", dropletName, -1)
-		runsh = strings.Replace(runsh, "%callback%", dropletName, -1)
+		runsh = strings.Replace(runsh, "%callback%", dropletData.CallBackURL, -1)
 		runsh = strings.Replace(runsh, "%repoURL%", dropletData.RepoURL, -1)
-		runsh = strings.Replace(runsh, "%repoBranch%", dropletData.ReporBranch, -1)
-
-		log.Print(runsh)
+		runsh = strings.Replace(runsh, "%repoBranch%", dropletData.RepoBranch, -1)
 
 
 		// ServeContent uses the name for mime detection
@@ -149,7 +147,7 @@ func createDroplets() http.Handler {
 		newDropletData.Name = createDroplet.Names[0]
 		newDropletData.InitialData = newDroplets[0]
 		newDropletData.RepoURL = createDroplet.RepoURL
-		newDropletData.ReporBranch = createDroplet.RepoBranch
+		newDropletData.RepoBranch = createDroplet.RepoBranch
 
 		newDropletData.Logs = []string{}
 
