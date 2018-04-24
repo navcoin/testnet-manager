@@ -7,8 +7,9 @@ import {SharedMaterialModule} from './shared/components/material/shared-material
 import {AppRoutingModule} from "./app-routing.module";
 import {DashboardModule} from "./dashboard/dashboard.module";
 import {CreateTestnetModule} from "./create-testnet/create-testnet.module";
-import {ServerService} from "./services/server.service";
+import {ServerService} from "./services/server/server.service";
 import {LocalStorageService} from "./services/local-storage/local-storage.service";
+import {DataService} from "./services/data/data.service";
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import {LocalStorageService} from "./services/local-storage/local-storage.servic
   ],
   providers: [
     ServerService,
-    LocalStorageService
+    LocalStorageService,
+    DataService
   ],
   bootstrap: [AppComponent]
 })
