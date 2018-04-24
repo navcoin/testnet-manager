@@ -80,12 +80,14 @@ export class CreateTestnetComponent implements OnInit {
   onCreate($event: MouseEvent) {
     $event.preventDefault();
 
-    let serverVO: ServerVO = {} as ServerVO;
+    const serverVO: ServerVO = {} as ServerVO;
 
     serverVO.token = this.doTokenCtrl.value;
     serverVO.name = this.testnetNameCtrl.value;
-    serverVO.servers = parseInt(this.doServerCtrl.value.toString());
-    serverVO.callbackUrl= this.ngrokCtrl.value;
+    serverVO.servers = parseInt(this.doServerCtrl.value.toString(), 10);
+    serverVO.callbackUrl = this.ngrokCtrl.value;
+    serverVO.repoBranch = this.gitBranchCtrl.value;
+    serverVO.repoUrl = this.gitUrlCtrl.value;
 
     this._serverService.createServers(serverVO);
 

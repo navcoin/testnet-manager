@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {ServerVO} from "./server.vo";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
+import {environment} from "../../environments/environment";
 
 @Injectable()
 export class ServerService {
@@ -35,26 +36,19 @@ export class ServerService {
   sendRequest(names: string[], serverVO: ServerVO) {
 
     let d = {
-      "names": names,
-      "region": "nyc3",
-      "size": "s-1vcpu-2gb",
-      "image": "ubuntu-16-04-x64",
-      "ssh_keys": null,
-      "backups": false,
-      "ipv6": true,
-      "user_data": this.getStartScript(serverVO, names[0]),
-      "private_networking": null,
-      "volumes": null,
-      "tags": [
-        "devnet"
-      ]
+      'names': names,
+      'repoURL': serverVO.repoUrl,
+      'repoBranch': serverVO.repoBranch,
+      'callBackURL': serverVO.callbackUrl,
+      'token': serverVO.token,
+      'userData': this.getStartScript(serverVO, names[0])
     };
 
 
-    const headers = new HttpHeaders()
-      .set("Authorization", `Bearer ${serverVO.token}`);
+    // const headers = new HttpHeaders()
+    //   .set("Authorization", `Bearer ${serverVO.token}`);
 
-    this._http.post("https://api.digitalocean.com/v2/droplets", d, {headers}).toPromise()
+    this._http.post(`${environment.serverURL}/api/node/v1/create`, d, ).toPromise()
       .catch((e) => {
         debugger
         console.log(e);
@@ -185,78 +179,10 @@ curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Berkeley DB 
 #------------------------------------------------
 curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Generating run.sh' ${serverVO.callbackUrl}/api/node/v1/log
 
-cd /
-cat <<EOT >> run.sh
+wget ${serverVO.callbackUrl}/api/node/v1/runfile
 
-cd /
-
-sleep 120
-curl -X POST -H 'Content-Type: application/json' -d "${serverName}: About to clone" ${serverVO.callbackUrl}/api/node/v1/log
-
-git clone -b v4.1.2-devnet https://github.com/NAVCoin/navcoin-core.git
-
-curl -X POST -H 'Content-Type: application/json' -d "${serverName}: Clone complete" ${serverVO.callbackUrl}/api/node/v1/log
-
-cd /navcoin-core
-
-curl -X POST -H 'Content-Type: application/json' -d "${serverName}: cd to navcoin-core" ${serverVO.callbackUrl}/api/node/v1/log
-
-./autogen.sh
-curl -X POST -H 'Content-Type: application/json' -d "${serverName} Ran navcoin autogen" ${serverVO.callbackUrl}/api/node/v1/log
-
-./configure LDFLAGS="-L/usr/local/berkeley-db-4.8/lib/" \\
-                CPPFLAGS="-I /usr/local/berkeley-db-4.8/include/" \\
-                --enable-hardening \\
-                --without-gui \\
-                --enable-upnp-default
-
-sleep 120
-curl -X POST -H 'Content-Type: application/json' -d "${serverName}: About to Make" ${serverVO.callbackUrl}/api/node/v1/log
-
-ls
-make
-
-curl -X POST -H 'Content-Type: application/json' -d "${serverName}: Make Complete" ${serverVO.callbackUrl}/api/node/v1/log
-make install
-curl -X POST -H 'Content-Type: application/json' -d "${serverName}: Install Complete" ${serverVO.callbackUrl}/api/node/v1/log
-
-ls
-cd ..
-
-rm -fr /navcoin-core/*
-rm -r /navcoin-core/
-
-curl -X POST -H 'Content-Type: application/json' -d "${serverName}: rm navcoin-src Complete" ${serverVO.callbackUrl}/api/node/v1/log
-
-
-navcoind -devnet -rpcuser=hi -rpcpassword=pass &
-curl -X POST -H 'Content-Type: application/json' -d "${serverName}: Start navcoin core Complete" ${serverVO.callbackUrl}/api/node/v1/log
-
-
-#curl -X POST -H 'Content-Type: application/json' -d "${serverName}: Sleeping" ${serverVO.callbackUrl}/api/node/v1/log
-#sleep 5
-#curl -X POST -H 'Content-Type: application/json' -d "${serverName}: awake" ${serverVO.callbackUrl}/api/node/v1/log
-
-#navcoin-cli -testnet -rpcuser=hi -rpcpassword=pass addnode "176.9.19.245" "add"
-#navcoin-cli -testnet -rpcuser=hi -rpcpassword=pass addnode "46.4.24.136" "add"
-
-#curl -X POST -H 'Content-Type: application/json' -d "${serverName}: Add nodes complete" ${serverVO.callbackUrl}/api/node/v1/log
-
-
-OUTPUT="$(navcoin-cli -testnet -staking -rpcuser=hi -rpcpassword=pass listreceivedbyaddress 0 true)"
-echo "%OUTPUT%"
-
-sleep 120
-curl -X POST -H 'Content-Type: application/json' -d "${serverName}:%OUTPUT%" ${serverVO.callbackUrl}/api/node/v1/log
-
-sleep 9999999999
-EOT
-
-
-chmod +x run.sh
-./run.sh
-
-curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Server setup complete' ${serverVO.callbackUrl}/api/node/v1/log
+chmod +x runfile
+./runfile
 
 
   `;
