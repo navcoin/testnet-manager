@@ -5,7 +5,7 @@ import {
   MatButtonModule,
   MatCardModule,
   MatCheckboxModule,
-  MatDialogModule,
+  MatDialogModule, MatExpansionModule,
   MatFormFieldModule,
   MatHorizontalStepper,
   MatIconModule,
@@ -40,7 +40,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     MatDialogModule,
     MatSnackBarModule,
     MatTabsModule,
-    MatStepperModule
+    MatStepperModule,
+    MatExpansionModule
 
   ],
   declarations: [
@@ -66,7 +67,9 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     MatCardModule,
     MatDialogModule,
     MatTabsModule,
-    MatStepperModule
+    MatStepperModule,
+    MatExpansionModule,
+
 
   ]
 })
