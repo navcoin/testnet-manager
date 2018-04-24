@@ -1,4 +1,18 @@
 <div style="padding: 30px;">
+
+  <form [formGroup]="globalSettingsGroup">
+    <mat-form-field>
+      <input matInput
+             formControlName="globalSettingTokenCtrl"
+             placeholder="Digital Ocean Token">
+    </mat-form-field>
+    <button mat-raised-button
+            (click)="onSaveToken($event)"
+            color="primary">Save for next time</button>
+    <button mat-raised-button
+            (click)="onClearToken($event)">Clear</button>
+  </form>
+
   <mat-horizontal-stepper [linear]="isLinear" #stepper="matHorizontalStepper">
 
     <mat-step [stepControl]="testnetNameFormGroup">

@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ServerService} from "../services/server.service";
 import {ServerVO} from "../services/server.vo";
+import {LocalStorageService} from "../services/local-storage/local-storage.service";
 
 // declare var TradingView;
 
@@ -31,11 +32,15 @@ export class CreateTestnetComponent implements OnInit {
   serverGroup: FormGroup;
   doServerCtrl: FormControl;
 
+  globalSettingsGroup: FormGroup;
+  globalSettingTokenCtrl: FormControl;
+
 
 
   constructor(
     private _formBuilder: FormBuilder,
-    private _serverService: ServerService
+    private _serverService: ServerService,
+    private _localStorageService: LocalStorageService
   ) { }
 
   ngOnInit() {
@@ -56,13 +61,19 @@ export class CreateTestnetComponent implements OnInit {
     this.ngrokGroup = this._formBuilder.group({});
     this.ngrokGroup.addControl("ngrokCtrl", this.ngrokCtrl);
 
-    this.doTokenCtrl = new FormControl('', Validators.required);
+    this.doTokenCtrl = new FormControl(this._localStorageService.getToken(), Validators.required);
     this.doTokenGroup = this._formBuilder.group({});
     this.doTokenGroup.addControl("doTokenCtrl", this.doTokenCtrl);
 
     this.doServerCtrl = new FormControl('', Validators.required);
     this.serverGroup = this._formBuilder.group({});
     this.serverGroup.addControl("doServerCtrl", this.doServerCtrl);
+
+
+
+    this.globalSettingTokenCtrl = new FormControl(this._localStorageService.getToken());
+    this.globalSettingsGroup = this._formBuilder.group({});
+    this.globalSettingsGroup.addControl("globalSettingTokenCtrl", this.globalSettingTokenCtrl);
 
   }
 
@@ -78,7 +89,19 @@ export class CreateTestnetComponent implements OnInit {
 
     this._serverService.createServers(serverVO);
 
+  }
 
+  onSaveToken($event: MouseEvent) {
+    $event.preventDefault();
+    this._localStorageService.setToken(this.globalSettingTokenCtrl.value.toString());
+    this.doTokenCtrl.setValue(this.globalSettingTokenCtrl.value.toString())
+  }
+
+  onClearToken($event: MouseEvent) {
+    $event.preventDefault();
+    this._localStorageService.clearToken();
+    this.globalSettingTokenCtrl.setValue('');
+    this.doTokenCtrl.setValue('')
   }
 
 }

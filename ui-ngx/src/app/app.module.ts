@@ -8,6 +8,7 @@ import {AppRoutingModule} from "./app-routing.module";
 import {DashboardModule} from "./dashboard/dashboard.module";
 import {CreateTestnetModule} from "./create-testnet/create-testnet.module";
 import {ServerService} from "./services/server.service";
+import {LocalStorageService} from "./services/local-storage/local-storage.service";
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import {ServerService} from "./services/server.service";
     AppRoutingModule
   ],
   providers: [
-    ServerService
+    ServerService,
+    LocalStorageService
   ],
   bootstrap: [AppComponent]
 })
