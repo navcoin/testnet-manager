@@ -256,6 +256,10 @@ cd /
 #create the start.sh file
 cat <<EOT >> start.sh
 
+cd /
+
+rm -fr /navcoin-core/*
+rm -r /navcoin-core/
 
 curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Getting runfile' ${serverVO.callbackUrl}/api/node/v1/log
 
