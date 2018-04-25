@@ -13,8 +13,38 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <div *ngFor="let log of model.logs">
-        {{log}}
+      <div class="content">
+        <div class="logging">
+          Latest....
+          <div *ngFor="let log of model.logs">
+            {{log}}
+          </div>
+          Oldest....
+        </div>
+
+        <div>
+          <h3>Server Controls</h3>
+
+          <div>
+            <mat-input-container floatPlaceholder="auto">
+              <input matInput
+                     value="{{model.repoURL}}"
+                     type="text"
+                     placeholder="Repo URL">
+            </mat-input-container>
+          </div>
+          <div>
+            <mat-input-container floatPlaceholder="auto">
+              <input matInput
+                     type="text"
+                     value="{{model.repoBranch}}"
+                     placeholder="Repo Branch">
+            </mat-input-container>
+          </div>
+          <button mat-raised-button>Update Server</button>
+          <br><small>This restarts the server</small>
+        </div>
+
       </div>
 
     </mat-expansion-panel>

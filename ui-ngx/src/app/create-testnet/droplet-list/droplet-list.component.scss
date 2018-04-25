@@ -2,4 +2,24 @@
 
 .list-wrapper{
   margin-top: 20px;
+
+  .content{
+
+    display: flex;
+    justify-content: space-between;
+
+    .logging {
+      padding: 10px;
+      background: #222222;
+      color: #39ff84;
+      font-family: monospace;
+
+    }
+
+  }
+
+
+
 }
+
+
