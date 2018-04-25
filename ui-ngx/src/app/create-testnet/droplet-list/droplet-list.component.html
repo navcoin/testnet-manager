@@ -25,6 +25,11 @@
         <div>
           <h3>Server Controls</h3>
 
+          <button (click)="onDeleteDropletHandler($event, model.initialData.id)"
+                  mat-raised-button color="accent">Delete Server</button>
+
+          <hr style="margin-bottom: 30px;">
+
           <div>
             <mat-input-container floatPlaceholder="auto">
               <input matInput

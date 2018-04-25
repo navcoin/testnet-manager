@@ -6,6 +6,4 @@ export interface DropletModel {
   repoURL: string;
   repoBranch: string;
   logs: string[];
-
-
 }

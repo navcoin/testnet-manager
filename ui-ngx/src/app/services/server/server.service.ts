@@ -6,13 +6,17 @@ import {dropletDataParser} from "./droplet-data.parser";
 import {DataService} from "../data/data.service";
 import {DropletModel} from "./droplet-model";
 import {TimerObservable} from "rxjs/observable/TimerObservable";
+import {LocalStorageService} from "../local-storage/local-storage.service";
+
+import * as _ from 'lodash';
 
 @Injectable()
 export class ServerService {
 
   constructor(
     private _http: HttpClient,
-    private _dataService: DataService
+    private _dataService: DataService,
+    private _localStorageServcie: LocalStorageService
   ) {
 
     TimerObservable.create(0, 1000).subscribe((obs) => {
@@ -61,6 +65,40 @@ export class ServerService {
 
 
   }
+
+  deleteDroplet(ddId: number) {
+
+    let d = {
+      'token': this._localStorageServcie.token,
+      'dropletId': ddId
+    }
+
+
+    this._http.post(`${environment.serverURL}/api/node/v1/delete`, d, ).toPromise()
+      .then((e) => {
+
+        _.remove(this._dataService.Droplets, (n) => {
+          return n.initialData.id == ddId
+        });
+
+      })
+      .catch((e) => {
+        debugger
+        console.log(e);
+
+      });
+
+
+
+  }
+
+
+  removeDropletFromData(dropletId: number) {
+
+
+
+  }
+
 
   sendRequest(names: string[], serverVO: ServerVO) {
 

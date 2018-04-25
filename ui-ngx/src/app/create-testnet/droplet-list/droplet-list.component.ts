@@ -13,6 +13,7 @@ export class DropletListComponent implements OnInit {
   constructor(
     private _serverService: ServerService,
     private _dataService: DataService
+
   ) { }
 
   ngOnInit() {
@@ -22,6 +23,12 @@ export class DropletListComponent implements OnInit {
 
   get dropletsData(): DropletModel[] {
     return this._dataService.Droplets;
+  }
+
+  onDeleteDropletHandler($event, dropletId: number) {
+
+    debugger;
+    this._serverService.deleteDroplet(dropletId);
   }
 
 }
