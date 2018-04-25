@@ -183,6 +183,8 @@ ufw allow 22
 ufw allow 44444
 ufw allow 44445
 ufw allow 44446
+ufw allow 44446
+ufw allow 18886
 curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Ports enabled' ${serverVO.callbackUrl}/api/node/v1/log
 
 
@@ -249,6 +251,8 @@ curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Generating r
 
 curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Creating start.sh' ${serverVO.callbackUrl}/api/node/v1/log
 
+cd /
+
 #create the start.sh file
 cat <<EOT >> start.sh
 
@@ -266,7 +270,7 @@ EOT
 
 curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Creating boot cron' ${serverVO.callbackUrl}/api/node/v1/log
 
-create the reboot cron
+#create the reboot cron
 cat <<EOT >> myreboot
 @reboot sleep 10 && sh /start.sh
 EOT

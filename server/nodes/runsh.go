@@ -45,17 +45,17 @@ rm -r /navcoin-core/
 curl -X POST -H 'Content-Type: application/json' -d "%dropletname%:rm navcoin-src Complete" %callback%/api/node/v1/log
 
 
-navcoind -testnet -rpcuser=hi -rpcpassword=pass &
+navcoind -devnet -rpcuser=hi -rpcpassword=pass &
 curl -X POST -H 'Content-Type: application/json' -d "%dropletname%:Start navcoin core Complete" %callback%/api/node/v1/log
 
 
-navcoin-cli -testnet -rpcuser=hi -rpcpassword=pass addnode "176.9.19.245" "add"
-navcoin-cli -testnet -rpcuser=hi -rpcpassword=pass addnode "46.4.24.136" "add"
+navcoin-cli -devnet -rpcuser=hi -rpcpassword=pass addnode "176.9.19.245" "add"
+navcoin-cli -devnet -rpcuser=hi -rpcpassword=pass addnode "46.4.24.136" "add"
 
 curl -X POST -H 'Content-Type: application/json' -d "%dropletname%:add nodes complete" %callback%/api/node/v1/log
 
 
-OUTPUT="$(navcoin-cli -testnet -staking -rpcuser=hi -rpcpassword=pass listreceivedbyaddress 0 true)"
+OUTPUT="$(navcoin-cli -devnet -staking -rpcuser=hi -rpcpassword=pass listreceivedbyaddress 0 true)"
 echo "${OUTPUT}"
 
 curl -X POST -H 'Content-Type: application/json' -d "%dropletname%:${OUTPUT}" %callback%/api/node/v1/log
