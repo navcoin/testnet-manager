@@ -5,16 +5,34 @@ export class LocalStorageService {
 
   constructor() {}
 
-  getToken() {
-    return localStorage.getItem('doToken');
+  private _tokenKey = 'doToken';
+  private _callbackKey = 'callbackKey';
+
+  get token(): string {
+    return localStorage.getItem(this._tokenKey);
   }
 
-  setToken(token: string) {
-    localStorage.setItem('doToken', token);
+  set token(token: string) {
+    localStorage.setItem(this._tokenKey, token);
   }
 
   clearToken() {
-    localStorage.removeItem('doToken');
+    localStorage.removeItem(this._tokenKey);
   }
+
+
+
+  get callBackURL(): string {
+    return localStorage.getItem(this._callbackKey);
+  }
+
+  set callBackURL(token: string) {
+    localStorage.setItem(this._callbackKey, token);
+  }
+
+  clearCallback() {
+    localStorage.removeItem(this._callbackKey);
+  }
+
 
 }

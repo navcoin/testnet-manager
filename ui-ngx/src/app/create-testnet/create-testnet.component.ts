@@ -34,6 +34,7 @@ export class CreateTestnetComponent implements OnInit {
 
   globalSettingsGroup: FormGroup;
   globalSettingTokenCtrl: FormControl;
+  globalSettingCallBackCtrl: FormControl;
 
 
 
@@ -57,11 +58,11 @@ export class CreateTestnetComponent implements OnInit {
     this.gitBranchGroup = this._formBuilder.group({});
     this.gitBranchGroup.addControl("gitBranchCtrl", this.gitBranchCtrl);
 
-    this.ngrokCtrl = new FormControl('', Validators.required);
+    this.ngrokCtrl = new FormControl(this._localStorageService.callBackURL, Validators.required);
     this.ngrokGroup = this._formBuilder.group({});
     this.ngrokGroup.addControl("ngrokCtrl", this.ngrokCtrl);
 
-    this.doTokenCtrl = new FormControl(this._localStorageService.getToken(), Validators.required);
+    this.doTokenCtrl = new FormControl(this._localStorageService.token, Validators.required);
     this.doTokenGroup = this._formBuilder.group({});
     this.doTokenGroup.addControl("doTokenCtrl", this.doTokenCtrl);
 
@@ -71,9 +72,11 @@ export class CreateTestnetComponent implements OnInit {
 
 
 
-    this.globalSettingTokenCtrl = new FormControl(this._localStorageService.getToken());
+    this.globalSettingTokenCtrl = new FormControl(this._localStorageService.token);
+    this.globalSettingCallBackCtrl = new FormControl(this._localStorageService.callBackURL);
     this.globalSettingsGroup = this._formBuilder.group({});
     this.globalSettingsGroup.addControl("globalSettingTokenCtrl", this.globalSettingTokenCtrl);
+    this.globalSettingsGroup.addControl("globalSettingCallBackCtrl", this.globalSettingCallBackCtrl);
 
   }
 
@@ -95,7 +98,7 @@ export class CreateTestnetComponent implements OnInit {
 
   onSaveToken($event: MouseEvent) {
     $event.preventDefault();
-    this._localStorageService.setToken(this.globalSettingTokenCtrl.value.toString());
+    this._localStorageService.token = this.globalSettingTokenCtrl.value.toString();
     this.doTokenCtrl.setValue(this.globalSettingTokenCtrl.value.toString())
   }
 
@@ -104,6 +107,20 @@ export class CreateTestnetComponent implements OnInit {
     this._localStorageService.clearToken();
     this.globalSettingTokenCtrl.setValue('');
     this.doTokenCtrl.setValue('')
+  }
+
+
+  onSaveCallback($event: MouseEvent) {
+    $event.preventDefault();
+    this._localStorageService.callBackURL = this.globalSettingCallBackCtrl.value.toString();
+    this.ngrokCtrl.setValue(this.globalSettingCallBackCtrl.value.toString())
+  }
+
+  onClearCallback($event: MouseEvent) {
+    $event.preventDefault();
+    this._localStorageService.clearCallback();
+    this.globalSettingCallBackCtrl.setValue('');
+    this.ngrokCtrl.setValue('')
   }
 
 }

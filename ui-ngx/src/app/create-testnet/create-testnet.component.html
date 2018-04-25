@@ -1,17 +1,33 @@
 <div style="padding: 30px;">
 
-  <form [formGroup]="globalSettingsGroup">
-    <mat-form-field>
-      <input matInput
-             formControlName="globalSettingTokenCtrl"
-             placeholder="Digital Ocean Token">
-    </mat-form-field>
-    <button mat-raised-button
-            (click)="onSaveToken($event)"
-            color="primary">Save for next time</button>
-    <button mat-raised-button
-            (click)="onClearToken($event)">Clear</button>
-  </form>
+  <div>
+    <form [formGroup]="globalSettingsGroup">
+      <div>
+        <mat-form-field>
+          <input matInput
+                 formControlName="globalSettingTokenCtrl"
+                 placeholder="Digital Ocean Token">
+        </mat-form-field>
+        <button mat-raised-button
+                (click)="onSaveToken($event)"
+                color="primary">Save for next time</button>
+        <button mat-raised-button
+                (click)="onClearToken($event)">Clear</button>
+      </div>
+      <div>
+        <mat-form-field>
+          <input matInput
+                 formControlName="globalSettingCallBackCtrl"
+                 placeholder="Server Callback URL">
+        </mat-form-field>
+        <button mat-raised-button
+                (click)="onSaveCallback($event)"
+                color="primary">Save for next time</button>
+        <button mat-raised-button
+                (click)="onClearCallback($event)">Clear</button>
+      </div>
+    </form>
+  </div>
 
   <mat-horizontal-stepper [linear]="isLinear" #stepper="matHorizontalStepper">
 
@@ -117,6 +133,24 @@
       </div>
     </mat-step>
   </mat-horizontal-stepper>
+
+
+  <div>
+    <mat-input-container floatPlaceholder="auto">
+      <input matInput
+             type="text"
+             placeholder="Repo URL">
+    </mat-input-container>
+
+
+    <mat-input-container floatPlaceholder="auto">
+      <input matInput
+             type="text"
+             placeholder="Repo Branch">
+    </mat-input-container>
+
+    <button mat-raised-button>Update All Servers!</button>
+  </div>
 
   <app-droplet-list></app-droplet-list>
 
