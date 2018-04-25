@@ -51,3 +51,20 @@ func CreateDroplet (token string, dropletReq *godo.DropletMultiCreateRequest) ([
 	return newDroplets, nil
 }
 
+
+func DeleteDroplet(token string, id int) {
+
+	ctx := context.TODO()
+
+	// get the the godo client
+	client := getClient(token)
+
+	_, err := client.Droplets.Delete(ctx, id)
+
+	if err != nil {
+		fmt.Printf("Something bad happened: %s\n\n", err)
+
+	}
+
+
+}

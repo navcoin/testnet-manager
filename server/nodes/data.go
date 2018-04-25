@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"log"
 	"bytes"
+	"github.com/digitalocean/godo"
 )
 
 var ActiveDropletsData = []DropletData{}
@@ -13,13 +14,14 @@ var ActiveDropletsData = []DropletData{}
 
 type DropletData struct {
 	Name               string      `json:"name"`
-	InitialData        interface{} `json:"initialData"`
+	InitialData        godo.Droplet `json:"initialData"`
 	CurrentDropletData interface{} `json:"currentDropletData"`
 	Logs               []string    `json:"logs"`
 	RepoBranch         string      `json:"repoBranch"`
 	RepoURL            string      `json:"repoURL"`
 	CallBackURL        string      `json:"callBackURL"`
 }
+
 
 
 func InitData () {
@@ -43,6 +45,32 @@ func loadDropletData()  {
 
 	r := bytes.NewReader(readData)
 	json.NewDecoder(r).Decode(&ActiveDropletsData)
+
+}
+
+func remove(numbers []int, search int) []int {
+	result := []int{}
+	for _, num := range numbers {
+		if num != search {
+			result = append(result, num)
+		}
+	}
+	return result
+}
+
+func removeDropletById(id int) {
+
+
+	arr := []DropletData{}
+
+	for _, dd := range ActiveDropletsData {
+		if dd.InitialData.ID != id {
+			arr = append(arr, dd)
+		}
+	}
+
+	ActiveDropletsData = arr
+
 
 }
 

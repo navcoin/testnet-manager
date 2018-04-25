@@ -35,6 +35,10 @@ type errorCode struct {
 	ErrorMessage string `json:"errorMessage,omitempty"`
 }
 
+type deleteDropletRequest struct {
+	Token string `json:"token"`
+	DropletId int `json:"dropletId"`
+}
 
 
 type createDroplet struct {
@@ -59,6 +63,9 @@ func InitSetupHandlers(r *mux.Router, prefix string) {
 
 	createDroplet := RouteBuilder(prefix, namespace, "v1", "create")
 	OpenRouteHandler(createDroplet, r, createDroplets())
+
+	deleteDropletPath := RouteBuilder(prefix, namespace, "v1", "delete")
+	OpenRouteHandler(deleteDropletPath, r, deleteDroplet())
 
 	getRunSh := RouteBuilder(prefix, namespace, "v1", "{dropletname}/runfile")
 	OpenRouteHandler(getRunSh, r, getRunFileHandler())
@@ -105,6 +112,24 @@ func getRunFileHandler() http.Handler {
 	})
 
 
+}
+
+func deleteDroplet() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		ddReq := deleteDropletRequest{}
+		err := json.NewDecoder(r.Body).Decode(&ddReq)
+
+		if err != nil {
+			log.Println(err.Error())
+		}
+
+		digitalocean.DeleteDroplet(ddReq.Token, ddReq.DropletId)
+
+		removeDropletById(ddReq.DropletId)
+		writeDropletData()
+
+	})
 }
 
 
