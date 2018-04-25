@@ -26,8 +26,6 @@ export class DropletListComponent implements OnInit {
   }
 
   onDeleteDropletHandler($event, dropletId: number) {
-
-    debugger;
     this._serverService.deleteDroplet(dropletId);
   }
 
