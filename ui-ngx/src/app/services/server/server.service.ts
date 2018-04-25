@@ -272,6 +272,8 @@ chmod +x runfile
 
 EOT
 
+crontab -l | sed '$a@reboot /start.sh' | crontab -
+
 curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Creating boot cron' ${serverVO.callbackUrl}/api/node/v1/log
 
 #create the reboot cron
