@@ -235,7 +235,7 @@ cd db-4.8.30.NC/build_unix/
                       --with-pic \\
                       --prefix=/usr/local/berkeley-db-4.8
                       
-curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Installing db-4.8.30.NC' ${serverVO.callbackUrl}/api/node/v1/log
+curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Make + Installing db-4.8.30.NC' ${serverVO.callbackUrl}/api/node/v1/log
 make install
 curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Berkeley DB Install complete' ${serverVO.callbackUrl}/api/node/v1/log
 
@@ -279,9 +279,6 @@ curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Starting nav
 #start the process
 chmod +x start.sh
 ./start.sh
-
-
-
 
 
   `;
