@@ -5,6 +5,7 @@ import {environment} from "../../../environments/environment";
 import {dropletDataParser} from "./droplet-data.parser";
 import {DataService} from "../data/data.service";
 import {DropletModel} from "./droplet-model";
+import {TimerObservable} from "rxjs/observable/TimerObservable";
 
 @Injectable()
 export class ServerService {
@@ -12,7 +13,17 @@ export class ServerService {
   constructor(
     private _http: HttpClient,
     private _dataService: DataService
-  ) { }
+  ) {
+
+    TimerObservable.create(0, 1000).subscribe((obs) => {
+
+      console.log('run');
+
+      this.dropletData();
+
+    });
+
+  }
 
 
   createServers(serverVO: ServerVO) {
@@ -42,12 +53,9 @@ export class ServerService {
 
     const path = `${environment.serverURL}/api/node/v1/all/data`;
 
-
     const resp = await this._http.get(path).toPromise();
 
-
-
-    this._dataService.Droplets = dropletDataParser(resp);
+    dropletDataParser(resp, this._dataService.Droplets);
 
     return   this._dataService.Droplets
 
