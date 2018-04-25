@@ -45,7 +45,7 @@ rm -r /navcoin-core/
 curl -X POST -H 'Content-Type: application/json' -d "%dropletname%:rm navcoin-src Complete" %callback%/api/node/v1/log
 
 
-navcoind -devnet -rpcuser=hi -rpcpassword=pass &
+navcoind -testnet -rpcuser=hi -rpcpassword=pass &
 curl -X POST -H 'Content-Type: application/json' -d "%dropletname%:Start navcoin core Complete" %callback%/api/node/v1/log
 
 
@@ -60,7 +60,7 @@ echo "${OUTPUT}"
 
 curl -X POST -H 'Content-Type: application/json' -d "%dropletname%:${OUTPUT}" %callback%/api/node/v1/log
 
-#curl -X POST -H 'Content-Type: application/json' -d "%dropletname%:Finished" %callback%/api/node/v1/log
+curl -X POST -H 'Content-Type: application/json' -d "%dropletname%:Finished" %callback%/api/node/v1/log
 
 
 sleep 9999999999`
