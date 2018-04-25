@@ -8,7 +8,7 @@ import {CreateTestnetComponent} from './create-testnet.component';
     RouterModule.forChild([
 
       {
-        path: 'testnet/create',
+        path: 'testnet',
         component: CreateTestnetComponent,
 
       },

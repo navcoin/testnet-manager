@@ -7,7 +7,7 @@ import {RouterModule} from '@angular/router';
 
       {
         path: '',
-        redirectTo: '/dashboard',
+        redirectTo: '/testnet',
         pathMatch: 'full'
       }
       /* define app module routes here, e.g., to lazily load a module
