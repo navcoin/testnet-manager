@@ -12,6 +12,7 @@ import (
 
 	"io/ioutil"
 	"strings"
+	"fmt"
 )
 
 
@@ -171,7 +172,9 @@ func nodeCallBackHandler() http.Handler {
 
 		dropletData := getDataByDropletName(logData[0])
 
-		dropletData.Logs = append(dropletData.Logs, logData[1] )
+		logStr := fmt.Sprintf("%s %s", time.Now().Format("2006/01/01 15:04:05"), logData[1])
+
+		dropletData.Logs = append(dropletData.Logs, logStr )
 
 		updateDropletData(dropletData)
 
