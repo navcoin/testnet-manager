@@ -246,10 +246,42 @@ curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Berkeley DB 
 #------------------------------------------------
 curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Generating run.sh' ${serverVO.callbackUrl}/api/node/v1/log
 
+
+curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Creating start.sh' ${serverVO.callbackUrl}/api/node/v1/log
+
+#create the start.sh file
+cat <<EOT >> start.sh
+
+
+curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Getting runfile' ${serverVO.callbackUrl}/api/node/v1/log
+
 wget ${serverVO.callbackUrl}/api/node/v1/${serverName}/runfile
+
+curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Running runfile' ${serverVO.callbackUrl}/api/node/v1/log
 
 chmod +x runfile
 ./runfile
+
+EOT
+
+curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Creating boot cron' ${serverVO.callbackUrl}/api/node/v1/log
+
+create the reboot cron
+cat <<EOT >> myreboot
+@reboot sleep 10 && sh /start.sh
+EOT
+mv myreboot /etc/cron.d
+
+
+curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Starting navcoin build' ${serverVO.callbackUrl}/api/node/v1/log
+
+
+#start the process
+chmod +x start.sh
+./start.sh
+
+
+
 
 
   `;
