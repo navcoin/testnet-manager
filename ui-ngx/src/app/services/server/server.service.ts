@@ -258,6 +258,8 @@ cat <<EOT >> start.sh
 
 cd /
 
+rm runfile
+
 rm -fr /navcoin-core/*
 rm -r /navcoin-core/
 
