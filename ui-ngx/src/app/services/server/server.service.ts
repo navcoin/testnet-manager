@@ -260,8 +260,8 @@ cd /
 
 rm runfile
 
-rm -fr /navcoin-core/*
-rm -r /navcoin-core/
+#rm -fr /navcoin-core/*
+#rm -r /navcoin-core/
 
 curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Getting runfile' ${serverVO.callbackUrl}/api/node/v1/log
 

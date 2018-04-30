@@ -35,6 +35,7 @@ func writeDropletData () {
 	rankingsJson, _ := json.Marshal(ActiveDropletsData)
 	err := ioutil.WriteFile("dropletData.json", rankingsJson, 0644)
 
+
 	if err != nil {
  		log.Println(err)
 	}
