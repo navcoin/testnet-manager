@@ -256,6 +256,8 @@ cd /
 #create the start.sh file
 cat <<EOT >> start.sh
 
+sleep 10
+
 cd /
 
 rm runfile
@@ -274,19 +276,12 @@ chmod +x runfile
 
 EOT
 
-crontab -l | sed '$a@reboot /start.sh' | crontab -
+chmod 744 /start.sh
 
-curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Creating boot cron' ${serverVO.callbackUrl}/api/node/v1/log
-
-#create the reboot cron
-cat <<EOT >> myreboot
-@reboot sleep 10 && sh /start.sh
-EOT
-mv myreboot /etc/cron.d
+crontab -l | { cat; echo "@reboot /start.sh"; } | crontab -
 
 
 curl -X POST -H 'Content-Type: application/json' -d '${serverName}: Starting navcoin build' ${serverVO.callbackUrl}/api/node/v1/log
-
 
 #start the process
 chmod +x start.sh
