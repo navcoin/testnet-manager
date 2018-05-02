@@ -40,6 +40,16 @@ type deleteDropletRequest struct {
 	DropletId int `json:"dropletId"`
 }
 
+type updateRepoDataRequest struct {
+	Token   string `json:"token"`
+	Updates []struct {
+		DropletID  int    `json:"dropletId"`
+		RepoURL    string `json:"repoURL"`
+		RepoBranch string `json:"repoBranch"`
+	} `json:"updates"`
+}
+
+
 
 type createDroplet struct {
 	Names []string `json:"names"`
@@ -66,6 +76,9 @@ func InitSetupHandlers(r *mux.Router, prefix string) {
 
 	deleteDropletPath := RouteBuilder(prefix, namespace, "v1", "delete")
 	OpenRouteHandler(deleteDropletPath, r, deleteDroplet())
+
+	updateRepoPath := RouteBuilder(prefix, namespace, "v1", "repo/update")
+	OpenRouteHandler(updateRepoPath, r, updateRepoHandler())
 
 	getRunSh := RouteBuilder(prefix, namespace, "v1", "{dropletname}/runfile")
 	OpenRouteHandler(getRunSh, r, getRunFileHandler())
@@ -112,6 +125,30 @@ func getRunFileHandler() http.Handler {
 	})
 
 
+}
+
+func updateRepoHandler() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		updateReq := updateRepoDataRequest{}
+		err := json.NewDecoder(r.Body).Decode(&updateReq)
+
+		if err != nil {
+			log.Println(err.Error())
+		}
+
+		for _, d := range updateReq.Updates {
+
+			drpltData := getDataByDropletId(d.DropletID)
+
+			drpltData.RepoBranch = d.RepoBranch
+			drpltData.RepoURL = d.RepoURL
+
+			updateDropletData(drpltData)
+
+			digitalocean.RestartDroplet(updateReq.Token, d.DropletID)
+		}
+	})
 }
 
 func deleteDroplet() http.Handler {

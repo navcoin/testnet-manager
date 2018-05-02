@@ -4,11 +4,11 @@ package nodes
 var runFile = `
 cd /
 
-curl -X POST -H 'Content-Type: application/json' -d "%dropletname%:About to clone" %callback%/api/node/v1/log
+curl -X POST -H 'Content-Type: application/json' -d "%dropletname%:About to clone - %repoBranch% %repoURL%" %callback%/api/node/v1/log
 
 git clone -b %repoBranch% %repoURL%
 
-curl -X POST -H 'Content-Type: application/json' -d "%dropletname%:Clone complete" %callback%/api/node/v1/log
+curl -X POST -H 'Content-Type: application/json' -d "%dropletname%:Clone complete - %repoBranch% %repoURL%" %callback%/api/node/v1/log
 
 
 cd /navcoin-core
@@ -58,7 +58,7 @@ curl -X POST -H 'Content-Type: application/json' -d "%dropletname%:add nodes com
 OUTPUT="$(navcoin-cli -devnet -staking -rpcuser=hi -rpcpassword=pass listreceivedbyaddress 0 true)"
 echo "${OUTPUT}"
 
-curl -X POST -H 'Content-Type: application/json' -d "%dropletname%:${OUTPUT}" %callback%/api/node/v1/log
+curl -X POST -H 'Content-Type: application/json' -d '%dropletname%:${OUTPUT}' %callback%/api/node/v1/log
 
 curl -X POST -H 'Content-Type: application/json' -d "%dropletname%:Finished" %callback%/api/node/v1/log
 

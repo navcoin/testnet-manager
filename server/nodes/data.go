@@ -75,6 +75,22 @@ func removeDropletById(id int) {
 
 }
 
+
+func getDataByDropletId(id int) (DropletData)  {
+
+	dd := DropletData{}
+
+	for _, dropletData := range ActiveDropletsData {
+
+		if dropletData.InitialData.ID == id {
+			dd = dropletData
+		}
+	}
+
+	return dd
+
+}
+
 func getDataByDropletName(name string) (DropletData)  {
 
 	dd := DropletData{}

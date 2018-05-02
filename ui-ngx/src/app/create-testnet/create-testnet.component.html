@@ -109,7 +109,8 @@
       <form [formGroup]="serverGroup">
         <ng-template matStepLabel>Size</ng-template>
         <mat-form-field>
-          <input matInput type="number" placeholder="How many servers" formControlName="doServerCtrl" required>
+          <input matInput type="number" placeholder="How many servers"
+                 formControlName="doServerCtrl" required>
         </mat-form-field>
         <div>
           <button mat-button matStepperPrevious>Back</button>
@@ -136,20 +137,24 @@
 
 
   <div>
-    <mat-input-container floatPlaceholder="auto">
-      <input matInput
-             type="text"
-             placeholder="Repo URL">
-    </mat-input-container>
+    <form [formGroup]="globalReposGroup">
+      <mat-input-container floatPlaceholder="auto">
+        <input matInput
+               type="text"
+               formControlName="globalRepoURL"
+               placeholder="Repo URL">
+      </mat-input-container>
 
 
-    <mat-input-container floatPlaceholder="auto">
-      <input matInput
-             type="text"
-             placeholder="Repo Branch">
-    </mat-input-container>
+      <mat-input-container floatPlaceholder="auto">
+        <input matInput
+               type="text"
+               formControlName="globalRepoBranch"
+               placeholder="Repo Branch">
+      </mat-input-container>
 
-    <button mat-raised-button>Update All Servers!</button>
+      <button mat-raised-button (click)="onUpdateAllServers($event)" type="button">Update All Servers!</button>
+    </form>
   </div>
 
   <app-droplet-list></app-droplet-list>

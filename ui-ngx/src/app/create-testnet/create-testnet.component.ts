@@ -37,6 +37,11 @@ export class CreateTestnetComponent implements OnInit {
   globalSettingCallBackCtrl: FormControl;
 
 
+  globalReposGroup: FormGroup;
+  globalRepoURL: FormControl;
+  globalRepoBranch: FormControl;
+
+
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -77,6 +82,15 @@ export class CreateTestnetComponent implements OnInit {
     this.globalSettingsGroup = this._formBuilder.group({});
     this.globalSettingsGroup.addControl("globalSettingTokenCtrl", this.globalSettingTokenCtrl);
     this.globalSettingsGroup.addControl("globalSettingCallBackCtrl", this.globalSettingCallBackCtrl);
+
+
+    this.globalRepoURL = new FormControl('https://github.com/NAVCoin/navcoin-core.git');
+    this.globalRepoBranch = new FormControl('');
+
+    this.globalReposGroup = this._formBuilder.group({});
+    this.globalReposGroup.addControl('globalRepoURL', this.globalRepoURL);
+    this.globalReposGroup.addControl('globalRepoBranch', this.globalRepoBranch);
+
 
   }
 
@@ -120,7 +134,14 @@ export class CreateTestnetComponent implements OnInit {
     $event.preventDefault();
     this._localStorageService.clearCallback();
     this.globalSettingCallBackCtrl.setValue('');
-    this.ngrokCtrl.setValue('')
+    this.ngrokCtrl.setValue('');
+  }
+
+  onUpdateAllServers($event: MouseEvent) {
+    $event.preventDefault();
+    debugger
+    this._serverService.updateAllRepos(this.globalRepoURL.value.toString(), this.globalRepoBranch.value.toString());
+
   }
 
 }

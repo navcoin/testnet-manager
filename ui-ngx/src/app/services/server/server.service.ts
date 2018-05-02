@@ -52,6 +52,46 @@ export class ServerService {
 
   }
 
+  async updateAllRepos(repURL: string, repoBranch: string) {
+    debugger
+    const path = `${environment.serverURL}/api/node/v1/repo/update`;
+
+    let updates: any[] = [];
+
+    this._dataService.Droplets.forEach((dm: DropletModel) => {
+
+      const update: any = {};
+      update.dropletId = dm.initialData.id;
+      update.repoURL = repURL;
+      update.repoBranch = repoBranch;
+
+      updates.push(update);
+
+
+    });
+
+
+    let d = {
+      token: this._localStorageServcie.token,
+      updates: updates
+    }
+
+
+    await this._http.post(path, d, ).toPromise()
+      .then((e) => {
+
+        debugger
+
+      })
+      .catch((e) => {
+        debugger
+        console.log(e);
+
+      });
+
+
+  }
+
 
   async dropletData() {
 
@@ -61,7 +101,7 @@ export class ServerService {
 
     dropletDataParser(resp, this._dataService.Droplets);
 
-    return   this._dataService.Droplets
+    return   this._dataService.Droplets;
 
 
   }

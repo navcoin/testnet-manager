@@ -5,6 +5,7 @@ import (
 	"github.com/digitalocean/godo"
 	"fmt"
 	"github.com/digitalocean/godo/context"
+	"log"
 )
 
 
@@ -29,6 +30,27 @@ func getClient(token string) (*godo.Client) {
 	}
 
 	return c
+
+}
+
+func RestartDroplet(token string, dropletID int)  {
+
+	ctx := context.TODO()
+
+	// get the the godo client
+	client := getClient(token)
+
+
+	_, resp, err := client.DropletActions.Reboot(ctx, dropletID)
+
+	log.Println(resp.Body)
+
+	if err != nil {
+		fmt.Printf("Something bad happened: %s\n\n", err)
+
+	}
+
+
 
 }
 
