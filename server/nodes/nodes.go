@@ -71,6 +71,9 @@ func InitSetupHandlers(r *mux.Router, prefix string) {
 	callbackPath := RouteBuilder(prefix, namespace, "v1", "log")
 	OpenRouteHandler(callbackPath, r, nodeCallBackHandler())
 
+	logAddressPath := RouteBuilder(prefix, namespace, "v1", "log/address")
+	OpenRouteHandler(logAddressPath, r, addressHandler())
+
 	createDroplet := RouteBuilder(prefix, namespace, "v1", "create")
 	OpenRouteHandler(createDroplet, r, createDroplets())
 
@@ -93,6 +96,32 @@ func getActiveNodesHandler() http.Handler {
 		appResp := Response{}
 		appResp.Data = ActiveDropletsData
 		appResp.Send(w)
+	})
+}
+
+func addressHandler() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		bodyBytes, _ := ioutil.ReadAll(r.Body)
+		bodyString := string(bodyBytes)
+
+		logData := strings.Split(bodyString, "::")
+
+		log.Println(bodyString)
+
+		var rawData []interface{}
+
+		log.Println(logData[1])
+
+		if err := json.Unmarshal([]byte(logData[1]), &rawData); err != nil {
+			log.Println(err.Error())
+		}
+
+		drpletD := getDataByDropletName(logData[0])
+		drpletD.Addresses = rawData
+
+		updateDropletData(drpletD)
+
 	})
 }
 

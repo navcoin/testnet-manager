@@ -20,6 +20,7 @@ type DropletData struct {
 	RepoBranch         string      `json:"repoBranch"`
 	RepoURL            string      `json:"repoURL"`
 	CallBackURL        string      `json:"callBackURL"`
+	Addresses		[]interface{} 	`json:"addresses"`
 }
 
 

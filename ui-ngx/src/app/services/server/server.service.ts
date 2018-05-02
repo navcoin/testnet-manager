@@ -60,12 +60,15 @@ export class ServerService {
 
     this._dataService.Droplets.forEach((dm: DropletModel) => {
 
-      const update: any = {};
-      update.dropletId = dm.initialData.id;
-      update.repoURL = repURL;
-      update.repoBranch = repoBranch;
+      if (dm.name.indexOf('seed') === -1) {
 
-      updates.push(update);
+        const update: any = {};
+        update.dropletId = dm.initialData.id;
+        update.repoURL = repURL;
+        update.repoBranch = repoBranch;
+
+        updates.push(update);
+      }
 
 
     });
