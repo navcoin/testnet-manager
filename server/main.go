@@ -8,6 +8,8 @@ import (
 	"github.com/gorilla/mux"
 	"net/http"
 	"github.com/NAVCoin/testnet-manager/server/nodes"
+	"time"
+	"math/rand"
 )
 
 func main() {
@@ -17,6 +19,8 @@ func main() {
 
 	nodes.InitData()
 
+
+	rand.Seed(int64(time.Now().Nanosecond()))
 
 
 	// setup the router and the api

@@ -61,7 +61,7 @@ export class ServerService {
     this._dataService.Droplets.forEach((dm: DropletModel) => {
 
       if (dm.name.indexOf('seed') === -1) {
-
+        debugger
         const update: any = {};
         update.dropletId = dm.initialData.id;
         update.repoURL = repURL;
@@ -318,8 +318,6 @@ chmod +x runfile
 ./runfile
 
 EOT
-
-chmod 744 /start.sh
 
 crontab -l | { cat; echo "@reboot /start.sh"; } | crontab -
 

@@ -86,6 +86,10 @@ func InitSetupHandlers(r *mux.Router, prefix string) {
 	getRunSh := RouteBuilder(prefix, namespace, "v1", "{dropletname}/runfile")
 	OpenRouteHandler(getRunSh, r, getRunFileHandler())
 
+
+	getDistSh := RouteBuilder(prefix, namespace, "v1", "distscript")
+	OpenRouteHandler(getDistSh, r, getDistFileHandler())
+
 	getActiveNodesPath := RouteBuilder(prefix, namespace, "v1", "all/data")
 	OpenRouteHandler(getActiveNodesPath, r, getActiveNodesHandler())
 
@@ -109,7 +113,7 @@ func addressHandler() http.Handler {
 
 		log.Println(bodyString)
 
-		var rawData []interface{}
+		var rawData = []ReceiveAdd{}
 
 		log.Println(logData[1])
 
@@ -124,6 +128,32 @@ func addressHandler() http.Handler {
 
 	})
 }
+
+func getDistFileHandler() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		//vars := mux.Vars(r)
+
+		//dropletName := vars["dropletname"]
+
+
+		// build the runfile for the box
+		distSH := buildDistCoinBash()
+
+		// ServeContent uses the name for mime detection
+		const name = "run"
+		modtime := time.Now()
+
+		// tell the browser the returned content should be downloaded
+		w.Header().Set("Content-Disposition", "Attachment; filename=coindist.sh")
+		http.ServeContent(w, r, name, modtime, bytes.NewReader([]byte(distSH)))
+
+
+	})
+
+
+}
+
 
 func getRunFileHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -140,6 +170,9 @@ func getRunFileHandler() http.Handler {
 		runsh = strings.Replace(runsh, "%callback%", dropletData.CallBackURL, -1)
 		runsh = strings.Replace(runsh, "%repoURL%", dropletData.RepoURL, -1)
 		runsh = strings.Replace(runsh, "%repoBranch%", dropletData.RepoBranch, -1)
+		//runsh = strings.Replace(runsh, "%distsh%", 	buildDistCoinBash(), -1)
+
+
 
 
 		// ServeContent uses the name for mime detection
@@ -168,7 +201,11 @@ func updateRepoHandler() http.Handler {
 
 		for _, d := range updateReq.Updates {
 
+
+
 			drpltData := getDataByDropletId(d.DropletID)
+
+			log.Println(fmt.Sprintf("Updating: %s ", drpltData.Name))
 
 			drpltData.RepoBranch = d.RepoBranch
 			drpltData.RepoURL = d.RepoURL
@@ -176,6 +213,8 @@ func updateRepoHandler() http.Handler {
 			updateDropletData(drpltData)
 
 			digitalocean.RestartDroplet(updateReq.Token, d.DropletID)
+
+			time.Sleep(60 * time.Second)
 		}
 	})
 }

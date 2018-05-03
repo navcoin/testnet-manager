@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/digitalocean/godo/context"
 	"log"
+	"io/ioutil"
 )
 
 
@@ -43,7 +44,13 @@ func RestartDroplet(token string, dropletID int)  {
 
 	_, resp, err := client.DropletActions.Reboot(ctx, dropletID)
 
-	log.Println(resp.Body)
+
+
+	bodyBytes, _ := ioutil.ReadAll(resp.Body)
+	bodyString := string(bodyBytes)
+
+	log.Println(bodyString)
+	log.Println(resp.Status)
 
 	if err != nil {
 		fmt.Printf("Something bad happened: %s\n\n", err)

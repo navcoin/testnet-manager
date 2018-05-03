@@ -12,15 +12,36 @@ var ActiveDropletsData = []DropletData{}
 
 
 
+
+type NodeAddressInfo struct {
+	Name string `json:"name"`
+	Address string `json:"address"`
+	DropletID int `json:"dropletId"`
+}
+
+
 type DropletData struct {
-	Name               string      `json:"name"`
-	InitialData        godo.Droplet `json:"initialData"`
-	CurrentDropletData interface{} `json:"currentDropletData"`
-	Logs               []string    `json:"logs"`
-	RepoBranch         string      `json:"repoBranch"`
-	RepoURL            string      `json:"repoURL"`
-	CallBackURL        string      `json:"callBackURL"`
-	Addresses		[]interface{} 	`json:"addresses"`
+	Name               string         `json:"name"`
+	InitialData        godo.Droplet   `json:"initialData"`
+	CurrentDropletData interface{}    `json:"currentDropletData"`
+	Logs               []string       `json:"logs"`
+	RepoBranch         string         `json:"repoBranch"`
+	RepoURL            string         `json:"repoURL"`
+	CallBackURL        string         `json:"callBackURL"`
+	Addresses			[]ReceiveAdd `json:"addresses"`
+}
+
+
+
+type ReceiveAdd struct {
+
+	Account       string        `json:"account"`
+	Address       string        `json:"address"`
+	Amount        float64           `json:"amount"`
+	Confirmations int           `json:"confirmations"`
+	Label         string        `json:"label"`
+	Txids         []interface{} `json:"txids"`
+
 }
 
 
@@ -106,6 +127,29 @@ func getDataByDropletName(name string) (DropletData)  {
 	return dd
 
 }
+
+
+func  getAllAddresses() []NodeAddressInfo {
+
+	otherNodes := []NodeAddressInfo{}
+
+	for _, dd := range ActiveDropletsData {
+
+		if len(dd.Addresses) != 0 {
+			n := NodeAddressInfo{}
+			n.DropletID = dd.InitialData.ID
+			n.Name = dd.Name
+			n.Address = string(dd.Addresses[0].Address)
+
+			otherNodes = append(otherNodes, n)
+		}
+
+	}
+
+	return otherNodes
+
+}
+
 
 // this updates the droplet data based on name
 // if it cant find the info it adds it to the data
