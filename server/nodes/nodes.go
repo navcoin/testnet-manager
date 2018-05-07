@@ -86,6 +86,9 @@ func InitSetupHandlers(r *mux.Router, prefix string) {
 	getRunSh := RouteBuilder(prefix, namespace, "v1", "{dropletname}/runfile")
 	OpenRouteHandler(getRunSh, r, getRunFileHandler())
 
+	getStartNavSh := RouteBuilder(prefix, namespace, "v1", "{dropletname}/startnavfile")
+	OpenRouteHandler(getStartNavSh, r, getNavStartFileHandler())
+
 
 	getDistSh := RouteBuilder(prefix, namespace, "v1", "distscript")
 	OpenRouteHandler(getDistSh, r, getDistFileHandler())
@@ -147,6 +150,41 @@ func getDistFileHandler() http.Handler {
 		// tell the browser the returned content should be downloaded
 		w.Header().Set("Content-Disposition", "Attachment; filename=coindist.sh")
 		http.ServeContent(w, r, name, modtime, bytes.NewReader([]byte(distSH)))
+
+
+	})
+
+
+}
+
+
+
+func getNavStartFileHandler() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		vars := mux.Vars(r)
+
+		dropletName := vars["dropletname"]
+
+		dropletData := getDataByDropletName(dropletName)
+
+		// build the runfile for the box
+		runsh := startnavsh
+		runsh = strings.Replace(runsh, "%dropletname%", dropletName, -1)
+		runsh = strings.Replace(runsh, "%callback%", dropletData.CallBackURL, -1)
+		runsh = strings.Replace(runsh, "%repoURL%", dropletData.RepoURL, -1)
+		runsh = strings.Replace(runsh, "%repoBranch%", dropletData.RepoBranch, -1)
+		//runsh = strings.Replace(runsh, "%distsh%", 	buildDistCoinBash(), -1)
+
+
+
+		// ServeContent uses the name for mime detection
+		const name = "startnavsh"
+		modtime := time.Now()
+
+		// tell the browser the returned content should be downloaded
+		w.Header().Set("Content-Disposition", "Attachment; filename=startnavsh.sh")
+		http.ServeContent(w, r, name, modtime, bytes.NewReader([]byte(runsh)))
 
 
 	})

@@ -2,7 +2,7 @@ package nodes
 
 import (
 	"math/rand"
-	"strconv"
+	"strings"
 )
 
 
@@ -16,11 +16,20 @@ func randInt(min int, max int) int {
 }
 
 
+func Shuffle(slc []NodeAddressInfo) {
+	N := len(slc)
+	for i := 0; i < N; i++ {
+		// choose index uniformly in [i, N-1]
+		r := i + rand.Intn(N-i)
+		slc[r], slc[i] = slc[i], slc[r]
+	}
+}
+
 func buildDistCoinBash() string {
 
 
 	n := getAllAddresses()
-
+	Shuffle(n)
 
 	arrs := `while :
 do
@@ -35,11 +44,17 @@ do
 		//	arrs = arrs +  `, "` + naim.Address + `"`
 		//}
 
-		arrs = arrs + `
-navcoin-cli -devnet -rpcuser=hi -rpcpassword=pass sendtoaddress "`+ naim.Address + `" `+ strconv.Itoa(randInt(1, 50)) +`
+		if ! strings.Contains(naim.Name, "stake") {
+
+			arrs = arrs + `
+navcoin-cli -devnet -rpcuser=hi -rpcpassword=pass sendtoaddress "`+ naim.Address + `" 10000
 sleep 1
 
 `
+			
+		}
+
+
 
 	}
 

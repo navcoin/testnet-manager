@@ -21,6 +21,11 @@ curl -X POST -H 'Content-Type: application/json' -d "%dropletname%::${OUTPUT}" %
 
 curl -X POST -H 'Content-Type: application/json' -d "%dropletname%:Running " %callback%/api/node/v1/log
 
+
+rm distscript
+wget %callback%/api/node/v1/distscript
+chmod +x distscript
+
 sleep 9999999999
 
 
