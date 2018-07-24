@@ -4,9 +4,9 @@ import (
 	"golang.org/x/oauth2"
 	"github.com/digitalocean/godo"
 	"fmt"
-	"github.com/digitalocean/godo/context"
 	"log"
 	"io/ioutil"
+	"context"
 )
 
 
